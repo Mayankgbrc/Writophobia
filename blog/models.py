@@ -20,6 +20,7 @@ class Category(models.Model):
 class SubCategory(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     title = models.CharField(max_length=50)
+    thumbnail = models.ImageField(upload_to='media/subcategory/thumbnail', default='')
     visible = models.BooleanField(default=True)
     priority = models.IntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
