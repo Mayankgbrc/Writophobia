@@ -73,3 +73,25 @@ class BlogDetailView(View):
             self.template_name, 
             context
         )
+
+from django.shortcuts import get_object_or_404
+
+class BlogLikeView(View):
+    queryset = Post.objects.all()
+
+    def get_queryset(self):
+        return get_object_or_404(
+            self.queryset, 
+            self.request.query_params.get('post_id')
+        )
+        
+
+    def post(self, request):
+        post_obj = self.get_queryset()
+        obj, created = PostLikes.objects.get_or_create(
+            post = post_obj, 
+            user = request.user
+        ) 
+        if not created:
+            obj.delete()
+        return HttpResponse({'status': 200, "created": created})
