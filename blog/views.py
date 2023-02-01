@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from blog.models import Post, PostViews, Profile, PostLikes
+from blog.models import Post, PostViews, Profile, PostLikes, ContentToPost
 from django.http import HttpResponse
 from django.db.models import F
 from django.views import View
@@ -19,14 +19,22 @@ class BlogSelectedView(View):
             visible = True
         )
 
-    def get(self, request, post_id):
+    def get(self, request, pk):
         obj = self.get_queryset(
-            post_id
+            pk
         )
         if obj.count():
             post_obj = obj.first()
-            post_obj.update(
-                views = F('views') + 1
+            post_obj.views += 1
+            post_obj.save()
+
+            post_obj.contents = ContentToPost.objects.filter(
+                post__id = pk
+            ).order_by(
+                'priority',
+                'created_at',
+                'updated_at',
+                'id'
             )
             
             if request.user.is_authenticated:

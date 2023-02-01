@@ -1,7 +1,6 @@
 from django.urls import path, include
-from blog.views import home, BlogDetailView
+from blog.views import BlogDetailView, BlogSelectedView
 
 urlpatterns = [
-    path('admin/', home),
-    path('view/<int:pk>/', BlogDetailView.as_view(), name='blog-detail'),
+    path('view/<int:pk>/', BlogSelectedView.as_view(), name='blog-detail'),
 ]

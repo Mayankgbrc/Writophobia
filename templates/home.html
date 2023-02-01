@@ -1,3 +1,5 @@
+{% load static %}
+
 <!doctype html>
 <html lang="en">
 
@@ -14,9 +16,14 @@
     <link rel="stylesheet" href="https://preview.colorlib.com/theme/wordify/fonts/flaticon/font/flaticon.css">
 
     <link rel="stylesheet" href="https://preview.colorlib.com/theme/wordify/css/style.css">
+
+    <!--
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism-tomorrow.min.css">
+    -->
+    <link rel="stylesheet" href="{% static 'prism-v1.css' %}">
 </head>
 
-<body>
+<body data-prismjs-copy="Copy Now">
     <div class="wrap">
         <header role="banner">
             <div class="top-bar">
@@ -35,14 +42,6 @@
                                 <input type="text" id="s" placeholder="Type keyword to search...">
                             </form>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="container logo-wrap">
-                <div class="row pt-5">
-                    <div class="col-12 text-center">
-                        <a class="absolute-toggle d-block d-md-none" data-toggle="collapse" href="#navbarMenu" role="button" aria-expanded="false" aria-controls="navbarMenu"><span class="burger-lines"></span></a>
-                        <h1 class="site-logo"><a href="index.html">Wordify</a></h1>
                     </div>
                 </div>
             </div>
@@ -88,15 +87,44 @@
             </nav>
         </header>
 
+        <div class="container logo-wrap">
+            <div class="row pt-5">
+                <div class="col-12 text-center">
+                    <a class="absolute-toggle d-block d-md-none" data-toggle="collapse" href="#navbarMenu" role="button" aria-expanded="false" aria-controls="navbarMenu"><span class="burger-lines"></span></a>
+                    <h1 class="site-logo" style="font-size: 30px;"><a href="index.html">{{post_obj.title}}</a></h1>
+                </div>
+            </div>
+        </div>
         <section class="site-section py-sm">
             <div class="container">
                 <div class="row">
                     <div class="col-md-6">
-                        <h2 class="mb-4">Latest Posts</h2>
+                        <h2 class="mb-4" style="display: none;">Some Data</h2>
                     </div>
                 </div>
                 <div class="row blog-entries">
-                    <div class="col-md-12 col-lg-12 main-content">
+                    <div class="col-md-12 col-lg-12 main-content"  style="font-size: 22px !important;">
+                        {% for each in post_obj.contents %}
+                            {% if each.context_type == '2' %}
+                            <pre class="language-python">
+                                <code class="language-python">
+                                    {{each.content}}
+                                </code>
+                            </pre>
+                            {% else %}
+                            <p>
+                                {{each.content | linebreaks}}
+                            </p>
+                            {% endif %}
+                        {% endfor %}
+                        <p class="text"> Javascript: </p>
+<pre class="language-js">
+<code class="language-js">
+  function example(a, b) {
+     console.log("example!);
+  }
+</code>
+</pre>
             <p>
             Welcome to the Python Wiki, a user-editable compendium of knowledge based around the Python programming language. Some pages are protected against casual editing - see WikiEditingGuidelines for more information about editing content. 
         </p><p>
@@ -106,6 +134,8 @@
                     </div>
                 </div>
             </div>
+            <img src="{% static 'test.png' %}" alt="My image">
+
         
         </section>
 
@@ -457,6 +487,10 @@
     <script src="https://preview.colorlib.com/theme/wordify/js/main.js"></script>
 
     <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vaafb692b2aea4879b33c060e79fe94621666317369993" integrity="sha512-0ahDYl866UMhKuYcW078ScMalXqtFJggm7TmlUtp0UlD4eQk0Ixfnm5ykXKvGJNFjLMoortdseTfsRT8oCfgGA==" data-cf-beacon='{"rayId":"78ea6294aa3b2e7c","token":"cd0b4b3a733644fc843ef0b185f98241","version":"2022.11.3","si":100}' crossorigin="anonymous"></script>
+    <!--
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/prism.min.js"></script>
+    -->
+    <script src="{% static 'prism-v1.js' %}"></script>
 </body>
 
 </html>
