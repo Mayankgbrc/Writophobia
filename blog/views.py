@@ -4,13 +4,14 @@ from django.http import HttpResponse
 from django.db.models import F
 from django.views import View
 from blog.filter import PostFilter
+from django.db.models import Case, When
 
 # Create your views here.
 def home(request):
     return render(request, 'home.html')
 
 class BlogSelectedView(View):
-    queryset = Post.objects.all()
+    queryset = Post.objects.filter(visible = True)
     template_name = 'home.html'
 
     def get_queryset(self, post_id):
@@ -18,6 +19,55 @@ class BlogSelectedView(View):
             id = post_id,
             visible = True
         )
+
+    def get_suggested_queryset(self, post_obj):
+        exclude_list = [post_obj.id]
+
+        _qs1 = self.queryset.filter(
+            subcategory = post_obj.subcategory,
+            category = post_obj.category
+        ).exclude(
+            id = post_obj.id
+        ).order_by(
+            '-priority',
+            '-created_at'
+        ).values_list(
+            'id', 
+            flat = True
+        )
+        exclude_list.extend(_qs1)
+
+        if len(exclude_list) < 10:
+            _qs2 = self.queryset.filter(
+                category = post_obj.category
+            ).exclude(
+                id__in = exclude_list
+            ).order_by(
+                '-priority',
+                '-created_at'
+            ).values_list(
+                'id', 
+                flat = True
+            )
+            exclude_list.extend(_qs2)
+            
+            if len(exclude_list) < 10:
+                _qs3 = self.queryset.exclude(
+                    id__in = exclude_list
+                ).order_by(
+                    '-priority',
+                    '-created_at'
+                ).values_list(
+                    'id', 
+                    flat = True
+                )
+                exclude_list.extend(_qs3)
+        
+        exclude_list = exclude_list[1:]
+        preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(exclude_list)])
+        final_list = self.queryset.filter(id__in=exclude_list).order_by(preserved)
+        
+        return final_list
 
     def get(self, request, pk):
         obj = self.get_queryset(
@@ -36,7 +86,12 @@ class BlogSelectedView(View):
                 'updated_at',
                 'id'
             )
-            
+
+            suggestions = self.get_suggested_queryset(
+                post_obj
+            )[:10]
+            print(suggestions)
+
             if request.user.is_authenticated:
                 PostViews.objects.create(
                     user = request.user,
@@ -44,7 +99,8 @@ class BlogSelectedView(View):
                 )
             
             context = {
-                "post_obj": post_obj
+                "post_obj": post_obj,
+                "suggestions": suggestions
             }
             return render(
                 request, 

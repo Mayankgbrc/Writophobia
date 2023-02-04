@@ -91,7 +91,7 @@
             <div class="row pt-5">
                 <div class="col-12 text-center">
                     <a class="absolute-toggle d-block d-md-none" data-toggle="collapse" href="#navbarMenu" role="button" aria-expanded="false" aria-controls="navbarMenu"><span class="burger-lines"></span></a>
-                    <h1 class="site-logo" style="font-size: 30px;"><a href="index.html">{{post_obj.title}}</a></h1>
+                    <h1 class="site-logo" style="font-size: 40px;">{{post_obj.title}}</h1>
                 </div>
             </div>
         </div>
@@ -105,50 +105,51 @@
                 <div class="row blog-entries">
                     <div class="col-md-12 col-lg-12 main-content"  style="font-size: 22px !important;">
                         {% for each in post_obj.contents %}
-                            {% if each.context_type == '2' %}
-                            <pre class="language-python">
-                                <code class="language-python">
+                            {% if each.content_type == 'code' %}
+                            <pre class="language-{{each.editor_type}}">
+                                <code class="language-{{each.editor_type}}">
                                     {{each.content}}
                                 </code>
                             </pre>
+                            {% elif each.content_type == 'image' %}
+                                <div style="text-align: center;">
+                                    <img src="/media/{% if each.image %}{{ each.image }}{% endif %}" style="max-height: 50vh; max-width: 100%;"/>
+                                    {{each.content | linebreaks}}
+                                </div>
                             {% else %}
                             <p>
                                 {{each.content | linebreaks}}
                             </p>
                             {% endif %}
                         {% endfor %}
-                        <p class="text"> Javascript: </p>
-<pre class="language-js">
-<code class="language-js">
-  function example(a, b) {
-     console.log("example!);
-  }
-</code>
-</pre>
-            <p>
-            Welcome to the Python Wiki, a user-editable compendium of knowledge based around the Python programming language. Some pages are protected against casual editing - see WikiEditingGuidelines for more information about editing content. 
-        </p><p>
-            Python is a great object-oriented, interpreted, and interactive programming language. It is often compared (favorably of course :-) ) to Lisp, Tcl, Perl, Ruby, C#, Visual Basic, Visual Fox Pro, Scheme or Java... and it's much more fun. 
-            </p>
-            Python combines remarkable power with very clear syntax. It has modules, classes, exceptions, very high level dynamic data types, and dynamic typing. There are interfaces to many system calls and libraries, as well as to various windowing systems. New built-in modules are easily written in C or C++ (or other languages, depending on the chosen implementation). Python is also usable as an extension language for applications written in other languages that need easy-to-use scripting or automation interfaces.
-                    </div>
-                </div>
-            </div>
-            <img src="{% static 'test.png' %}" alt="My image">
-
-        
         </section>
+        <br><br>
 
         <section class="site-section py-sm">
             <div class="container">
                 <div class="row">
                     <div class="col-md-6">
-                        <h2 class="mb-4">Latest Posts</h2>
+                        <h2 class="mb-4">Suggestions</h2>
                     </div>
                 </div>
                 <div class="row blog-entries">
                     <div class="col-md-12 col-lg-8 main-content">
                         <div class="row">
+                            {% for each in suggestions %}
+                            <div class="col-md-6">
+                                <a href="blog-single.html" class="blog-entry element-animate" data-animate-effect="fadeIn">
+                                    <img src="/media/{% if each.thumbnail %}{{ each.thumbnail }}{% elif each.subcategory.thumbnail %}{{ each.subcategory.thumbnail }}{% elif each.category.thumbnail %}{{ each.category.thumbnail }}{% endif %}" alt="Image placeholder">
+                                    <div class="blog-content-body">
+                                        <div class="post-meta">
+                                            <span class="author mr-2"><img src="https://preview.colorlib.com/theme/wordify/images/person_1.jpg" alt="Colorlib"> {{each.author.get_full_name}}</span>&bullet;
+                                            <span class="mr-2">{{each.created_at.date}}</span> &bullet;
+                                            <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
+                                        </div>
+                                        <h2>{{each.title}}</h2>
+                                    </div>
+                                </a>
+                            </div>
+                            {% endfor %}
                             <div class="col-md-6">
                                 <a href="blog-single.html" class="blog-entry element-animate" data-animate-effect="fadeIn">
                                     <img src="https://preview.colorlib.com/theme/wordify/images/img_5.jpg" alt="Image placeholder">

@@ -13,6 +13,7 @@ class Profile(User):
 
 class Category(models.Model):
     title = models.CharField(max_length=50)
+    thumbnail = models.ImageField(upload_to='media/category/thumbnail', blank=True, null=True)
     visible = models.BooleanField(default=True)
     priority = models.IntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -24,7 +25,7 @@ class Category(models.Model):
 class SubCategory(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     title = models.CharField(max_length=50)
-    thumbnail = models.ImageField(upload_to='media/subcategory/thumbnail', default='')
+    thumbnail = models.ImageField(upload_to='media/subcategory/thumbnail', blank=True, null=True)
     visible = models.BooleanField(default=True)
     priority = models.IntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -35,8 +36,8 @@ class SubCategory(models.Model):
 
 class Post(models.Model):
     title = models.CharField(max_length=50)
-    #content= models.TextField()
-    #content = HTMLField()
+    description = models.TextField(blank=True, null=True)
+    tags = models.TextField(blank=True, null=True, help_text="Add tags comma separated without space")
     views = models.IntegerField(default=0)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     subcategory = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
@@ -51,11 +52,14 @@ class Post(models.Model):
         return self.title
     # Multieditor reference link: https://blog.devgenius.io/best-free-wysiwyg-editor-python-django-admin-panel-integration-d9cb30da1dba
 
-class ContentToPost(models.Model): # Change to content typo, and thumbnail to be not required.
+
+class ContentToPost(models.Model): 
     post = models.ForeignKey(Post, on_delete=models.CASCADE, blank=True, null=True)
-    content = models.TextField(blank=True, null=True)
-    context_type = models.CharField(max_length=64, blank=True, null=True) # Change this to content_type
-    priority = models.IntegerField(default=1)
+    image = models.ImageField(upload_to='media/post/image', blank=True, null=True)
+    content = models.TextField(blank=True, null=True, help_text="If image has been chosen, this field will work as image description")
+    content_type = models.CharField(max_length=64, blank=True, null=True, default = "text")
+    editor_type = models.CharField(max_length=64, blank=True, null=True) 
+    priority = models.IntegerField(default=1, help_text="Here priority in ascending order like 1 will appear on top")
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
