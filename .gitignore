@@ -3,3 +3,4 @@ blog/__pycache__/*
 */__pycache__/*
 blog/migrations/__pycache__/*
 authenticate/migrations/__pycache__/*
+blog/templatetags/__pycache__/*

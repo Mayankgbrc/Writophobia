@@ -4,6 +4,8 @@ from tinymce.models import HTMLField
 
 class Profile(User):
     user_type = models.CharField(max_length=20)
+    description = models.TextField(blank=True, null=True)
+    picture = models.ImageField(upload_to='media/user/picture', blank=True, null=True)
     visible = models.BooleanField(default=True)
     verified = models.BooleanField(default=False)
     is_blacklisted = models.BooleanField(default=False)

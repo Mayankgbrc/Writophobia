@@ -1,10 +1,11 @@
 from django.shortcuts import render
-from blog.models import Post, PostViews, Profile, PostLikes, ContentToPost
+from blog.models import Post, PostViews, Profile, PostLikes, ContentToPost, Category, SubCategory
 from django.http import HttpResponse
 from django.db.models import F
 from django.views import View
 from blog.filter import PostFilter
-from django.db.models import Case, When
+from django.db.models import Case, When, Count
+from blog.utils import get_image_url
 
 # Create your views here.
 def home(request):
@@ -18,6 +19,13 @@ class BlogSelectedView(View):
         return self.queryset.filter(
             id = post_id,
             visible = True
+        )
+
+    def get_categories_queryset(self):
+        return Category.objects.filter(
+            visible = True
+        ).annotate(
+            total_count = Count('post')
         )
 
     def get_suggested_queryset(self, post_obj):
@@ -74,6 +82,7 @@ class BlogSelectedView(View):
             pk
         )
         if obj.count():
+            categories = self.get_categories_queryset()
             post_obj = obj.first()
             post_obj.views += 1
             post_obj.save()
@@ -87,10 +96,16 @@ class BlogSelectedView(View):
                 'id'
             )
 
+
             suggestions = self.get_suggested_queryset(
                 post_obj
             )[:10]
-            print(suggestions)
+            
+            for each in suggestions:
+                each.image_url = get_image_url(each)
+            
+            post_obj.image_url = get_image_url(post_obj)
+
 
             if request.user.is_authenticated:
                 PostViews.objects.create(
@@ -100,7 +115,8 @@ class BlogSelectedView(View):
             
             context = {
                 "post_obj": post_obj,
-                "suggestions": suggestions
+                "suggestions": suggestions,
+                "categories": categories
             }
             return render(
                 request, 
