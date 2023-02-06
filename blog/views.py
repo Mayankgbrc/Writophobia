@@ -6,26 +6,23 @@ from django.views import View
 from blog.filter import PostFilter
 from django.db.models import Case, When, Count
 from blog.utils import get_image_url
-
-# Create your views here.
-def home(request):
-    return render(request, 'home.html')
+from django.core.paginator import Paginator
 
 class BlogSelectedView(View):
     queryset = Post.objects.filter(visible = True)
-    template_name = 'home.html'
-
-    def get_queryset(self, post_id):
-        return self.queryset.filter(
-            id = post_id,
-            visible = True
-        )
+    template_name = 'blog.html'
 
     def get_categories_queryset(self):
         return Category.objects.filter(
             visible = True
         ).annotate(
             total_count = Count('post')
+        )
+
+    def get_queryset(self, post_id):
+        return self.queryset.filter(
+            id = post_id,
+            visible = True
         )
 
     def get_suggested_queryset(self, post_obj):
@@ -82,7 +79,6 @@ class BlogSelectedView(View):
             pk
         )
         if obj.count():
-            categories = self.get_categories_queryset()
             post_obj = obj.first()
             post_obj.views += 1
             post_obj.save()
@@ -116,7 +112,7 @@ class BlogSelectedView(View):
             context = {
                 "post_obj": post_obj,
                 "suggestions": suggestions,
-                "categories": categories
+                "categories": self.get_categories_queryset()
             }
             return render(
                 request, 
@@ -127,12 +123,35 @@ class BlogSelectedView(View):
 
 
 
-class BlogDetailView(View):
-    queryset = Post.objects.all()
+class HomeView(View):
+    queryset = Post.objects.filter(
+        visible = True,
+        visible_at_homepage = True
+    )
     template_name = 'home.html'
     filter_class = PostFilter
 
+    def get_categories_queryset(self):
+        return Category.objects.filter(
+            visible = True
+        ).annotate(
+            total_count = Count('post')
+        )
+    
+    def get_subcategories_queryset(self):
+        _qs = SubCategory.objects.filter(
+            visible = True
+        )
+        subcat_dict = {}
+        for each in _qs:
+            if each.category.title not in subcat_dict:
+                subcat_dict[each.category] = each
+            else:
+                subcat_dict[each.category].append(each)
+        
     def get_queryset(self):
+        _qs = self.queryset
+        searched = self.request.GET.get('search')
         return self.filter_class(
             self.request.GET, 
             self.queryset
@@ -144,9 +163,23 @@ class BlogDetailView(View):
         
 
     def get(self, request):
-        obj = self.get_queryset()
+        page_number = request.GET.get('page')
+        post_objects = self.get_queryset()
+        paginator = Paginator(post_objects, 3)
+        page_obj = paginator.get_page(page_number)
+        for each in page_obj:
+            each.image_url = get_image_url(each)
+
+        params = ""
+        for each in request.GET:
+            if each != "page":
+                params+= f'&{each}={request.GET[each]}'
+
         context = {
-            "post_obj": obj
+            "post_objects": page_obj,
+            "page_range": range(1, page_obj.paginator.num_pages + 1),
+            "params": params,
+            "categories": self.get_categories_queryset()
         }
         return render(
             request, 
