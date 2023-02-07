@@ -10,13 +10,20 @@ from django.core.paginator import Paginator
 
 class BlogSelectedView(View):
     queryset = Post.objects.filter(visible = True)
-    template_name = 'blog.html'
+    template_name = 'blog/blog_main.html'
 
     def get_categories_queryset(self):
         return Category.objects.filter(
             visible = True
         ).annotate(
             total_count = Count('post')
+        )
+    
+    def get_subcategories_queryset(self):
+        return SubCategory.objects.filter(
+            visible = True
+        ).order_by(
+            '-priority'
         )
 
     def get_queryset(self, post_id):
@@ -112,7 +119,8 @@ class BlogSelectedView(View):
             context = {
                 "post_obj": post_obj,
                 "suggestions": suggestions,
-                "categories": self.get_categories_queryset()
+                "categories": self.get_categories_queryset(),
+                "subcategories": self.get_subcategories_queryset()
             }
             return render(
                 request, 
@@ -128,7 +136,7 @@ class HomeView(View):
         visible = True,
         visible_at_homepage = True
     )
-    template_name = 'home.html'
+    template_name = 'blog/home_main.html'
     filter_class = PostFilter
 
     def get_categories_queryset(self):
@@ -136,22 +144,24 @@ class HomeView(View):
             visible = True
         ).annotate(
             total_count = Count('post')
+        ).order_by(
+            '-priority'
         )
     
     def get_subcategories_queryset(self):
-        _qs = SubCategory.objects.filter(
+        return SubCategory.objects.filter(
             visible = True
+        ).order_by(
+            '-priority'
         )
-        subcat_dict = {}
-        for each in _qs:
-            if each.category.title not in subcat_dict:
-                subcat_dict[each.category] = each
-            else:
-                subcat_dict[each.category].append(each)
+        #subcat_dict = {}
+        #for each in _qs:
+        #    if each.category.title not in subcat_dict:
+        #        subcat_dict[each.category] = each
+        #    else:
+        #        subcat_dict[each.category].append(each)
         
     def get_queryset(self):
-        _qs = self.queryset
-        searched = self.request.GET.get('search')
         return self.filter_class(
             self.request.GET, 
             self.queryset
@@ -164,6 +174,7 @@ class HomeView(View):
 
     def get(self, request):
         page_number = request.GET.get('page')
+        searched = request.GET.get('search','').strip(" ")
         post_objects = self.get_queryset()
         paginator = Paginator(post_objects, 3)
         page_obj = paginator.get_page(page_number)
@@ -179,7 +190,9 @@ class HomeView(View):
             "post_objects": page_obj,
             "page_range": range(1, page_obj.paginator.num_pages + 1),
             "params": params,
-            "categories": self.get_categories_queryset()
+            "categories": self.get_categories_queryset(),
+            "subcategories": self.get_subcategories_queryset(),
+            "searched": searched
         }
         return render(
             request, 

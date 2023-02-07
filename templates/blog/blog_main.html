@@ -42,67 +42,7 @@
 
 <body data-prismjs-copy="Copy Now">
     <div class="wrap">
-        <header role="banner">
-            <div class="top-bar">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-9 social">
-                            <a href="#"><span class="fa fa-twitter"></span></a>
-                            <a href="#"><span class="fa fa-facebook"></span></a>
-                            <a href="#"><span class="fa fa-instagram"></span></a>
-                            <a href="#"><span class="fa fa-youtube-play"></span></a>
-                        </div>
-                        <div class="col-3 search-top">
-
-                            <form action="#" class="search-top-form">
-                                <span class="icon fa fa-search"></span>
-                                <input type="text" id="s" placeholder="Type keyword to search...">
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <nav class="navbar navbar-expand-md  navbar-light bg-light">
-                <div class="container">
-                    <div class="collapse navbar-collapse" id="navbarMenu">
-                        <ul class="navbar-nav mx-auto">
-                            <li class="nav-item">
-                                <a class="nav-link active" href="index.html">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Business</a>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="category.html" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Travel</a>
-                                <div class="dropdown-menu" aria-labelledby="dropdown04">
-                                    <a class="dropdown-item" href="category.html">Asia</a>
-                                    <a class="dropdown-item" href="category.html">Europe</a>
-                                    <a class="dropdown-item" href="category.html">Dubai</a>
-                                    <a class="dropdown-item" href="category.html">Africa</a>
-                                    <a class="dropdown-item" href="category.html">South America</a>
-                                </div>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="category.html" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Categories</a>
-                                <div class="dropdown-menu" aria-labelledby="dropdown05">
-                                    <a class="dropdown-item" href="category.html">Lifestyle</a>
-                                    <a class="dropdown-item" href="category.html">Food</a>
-                                    <a class="dropdown-item" href="category.html">Adventure</a>
-                                    <a class="dropdown-item" href="category.html">Travel</a>
-                                    <a class="dropdown-item" href="category.html">Business</a>
-                                </div>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="about.html">About</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="contact.html">Contact</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        </header>
+        {% include 'blog/header.html' %}
 
         <div class="container logo-wrap">
             <div class="row pt-5">
@@ -151,142 +91,7 @@
                 </div>
                 <div class="row blog-entries">
                     <div class="col-md-12 col-lg-8 main-content">
-                        <div class="row">
-                            {% for each in suggestions %}
-                            <div class="col-md-6">
-                                <a href="blog-single.html" class="blog-entry element-animate" data-animate-effect="fadeIn">
-                                    <img src="/media/{{each.image_url}}" alt="Image placeholder">
-                                    <div class="blog-content-body">
-                                        <div class="post-meta">
-                                            <span class="author mr-2"><img src="https://preview.colorlib.com/theme/wordify/images/person_1.jpg" alt="Colorlib"> {{each.author.get_full_name}}</span>&bullet;
-                                            <span class="mr-2">{{each.created_at.date}}</span> &bullet;
-                                            <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                                        </div>
-                                        <h2>{{each.title}}</h2>
-                                    </div>
-                                </a>
-                            </div>
-                            {% endfor %}
-                            <div class="col-md-6">
-                                <a href="blog-single.html" class="blog-entry element-animate" data-animate-effect="fadeIn">
-                                    <img src="https://preview.colorlib.com/theme/wordify/images/img_5.jpg" alt="Image placeholder">
-                                    <div class="blog-content-body">
-                                        <div class="post-meta">
-                                            <span class="author mr-2"><img src="https://preview.colorlib.com/theme/wordify/images/person_1.jpg" alt="Colorlib"> Colorlib</span>&bullet;
-                                            <span class="mr-2">March 15, 2018 </span> &bullet;
-                                            <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                                        </div>
-                                        <h2>How to Find the Video Games of Your Youth</h2>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-6">
-                                <a href="blog-single.html" class="blog-entry element-animate" data-animate-effect="fadeIn">
-                                    <img src="https://preview.colorlib.com/theme/wordify/images/img_6.jpg" alt="Image placeholder">
-                                    <div class="blog-content-body">
-                                        <div class="post-meta">
-                                            <span class="author mr-2"><img src="https://preview.colorlib.com/theme/wordify/images/person_1.jpg" alt="Colorlib"> Colorlib</span>&bullet;
-                                            <span class="mr-2">March 15, 2018 </span> &bullet;
-                                            <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                                        </div>
-                                        <h2>How to Find the Video Games of Your Youth</h2>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-6">
-                                <a href="blog-single.html" class="blog-entry element-animate" data-animate-effect="fadeIn">
-                                    <img src="https://preview.colorlib.com/theme/wordify/images/img_7.jpg" alt="Image placeholder">
-                                    <div class="blog-content-body">
-                                        <div class="post-meta">
-                                            <span class="author mr-2"><img src="https://preview.colorlib.com/theme/wordify/images/person_1.jpg" alt="Colorlib"> Colorlib</span>&bullet;
-                                            <span class="mr-2">March 15, 2018 </span> &bullet;
-                                            <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                                        </div>
-                                        <h2>How to Find the Video Games of Your Youth</h2>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-6">
-                                <a href="blog-single.html" class="blog-entry element-animate" data-animate-effect="fadeIn">
-                                    <img src="https://preview.colorlib.com/theme/wordify/images/img_8.jpg" alt="Image placeholder">
-                                    <div class="blog-content-body">
-                                        <div class="post-meta">
-                                            <span class="author mr-2"><img src="https://preview.colorlib.com/theme/wordify/images/person_1.jpg" alt="Colorlib"> Colorlib</span>&bullet;
-                                            <span class="mr-2">March 15, 2018 </span> &bullet;
-                                            <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                                        </div>
-                                        <h2>How to Find the Video Games of Your Youth</h2>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-6">
-                                <a href="blog-single.html" class="blog-entry element-animate" data-animate-effect="fadeIn">
-                                    <img src="https://preview.colorlib.com/theme/wordify/images/img_9.jpg" alt="Image placeholder">
-                                    <div class="blog-content-body">
-                                        <div class="post-meta">
-                                            <span class="author mr-2"><img src="https://preview.colorlib.com/theme/wordify/images/person_1.jpg" alt="Colorlib"> Colorlib</span>&bullet;
-                                            <span class="mr-2">March 15, 2018 </span> &bullet;
-                                            <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                                        </div>
-                                        <h2>How to Find the Video Games of Your Youth</h2>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-6">
-                                <a href="blog-single.html" class="blog-entry element-animate" data-animate-effect="fadeIn">
-                                    <img src="https://preview.colorlib.com/theme/wordify/images/img_10.jpg" alt="Image placeholder">
-                                    <div class="blog-content-body">
-                                        <div class="post-meta">
-                                            <span class="author mr-2"><img src="https://preview.colorlib.com/theme/wordify/images/person_1.jpg" alt="Colorlib"> Colorlib</span>&bullet;
-                                            <span class="mr-2">March 15, 2018 </span> &bullet;
-                                            <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                                        </div>
-                                        <h2>How to Find the Video Games of Your Youth</h2>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-6">
-                                <a href="blog-single.html" class="blog-entry element-animate" data-animate-effect="fadeIn">
-                                    <img src="https://preview.colorlib.com/theme/wordify/images/img_11.jpg" alt="Image placeholder">
-                                    <div class="blog-content-body">
-                                        <div class="post-meta">
-                                            <span class="author mr-2"><img src="https://preview.colorlib.com/theme/wordify/images/person_1.jpg" alt="Colorlib"> Colorlib</span>&bullet;
-                                            <span class="mr-2">March 15, 2018 </span> &bullet;
-                                            <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                                        </div>
-                                        <h2>How to Find the Video Games of Your Youth</h2>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-6">
-                                <a href="blog-single.html" class="blog-entry element-animate" data-animate-effect="fadeIn">
-                                    <img src="https://preview.colorlib.com/theme/wordify/images/img_12.jpg" alt="Image placeholder">
-                                    <div class="blog-content-body">
-                                        <div class="post-meta">
-                                            <span class="author mr-2"><img src="https://preview.colorlib.com/theme/wordify/images/person_1.jpg" alt="Colorlib"> Colorlib</span>&bullet;
-                                            <span class="mr-2">March 15, 2018 </span> &bullet;
-                                            <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                                        </div>
-                                        <h2>How to Find the Video Games of Your Youth</h2>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="row mt-5">
-                            <div class="col-md-12 text-center">
-                                <nav aria-label="Page navigation" class="text-center">
-                                    <ul class="pagination">
-                                        <li class="page-item  active"><a class="page-link" href="#">&lt;</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">5</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">&gt;</a></li>
-                                    </ul>
-                                </nav>
-                            </div>
-                        </div>
+                        {% include 'blog/blog_list.html' with post_objects=suggestions home=False %}
                     </div>
 
                     <div class="col-md-12 col-lg-4 sidebar">
@@ -361,7 +166,7 @@
                             <h3 class="heading">Categories</h3>
                             <ul class="categories">
                                 {% for each in categories %}
-                                    <li><a href="#">{{each.title}} <span>({{ each.total_count }})</span></a></li>
+                                    <li><a href="{% url 'home' %}?category={{each.title}}">{{each.title}} <span>({{ each.total_count }})</span></a></li>
                                 {% endfor %}
                                 <!--
                                 <li><a href="#">Food <span>(12)</span></a></li>

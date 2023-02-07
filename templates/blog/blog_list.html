@@ -1,0 +1,22 @@
+{% load static %}
+{% load custom_filters %}
+<div class="row">
+    {% for each in post_objects %}
+    <div class="{% if home == True %}col-lg-4{% endif %} col-md-6">
+        <a href="/blog/view/{{each.id}}" class="blog-entry element-animate" data-animate-effect="fadeIn">
+            <img src="/media/{{each.image_url}}" alt="Image placeholder">
+            <div class="blog-content-body">
+                <div class="post-meta">
+                    <span class="author mr-2"><img src="https://preview.colorlib.com/theme/wordify/images/person_1.jpg" alt="Colorlib"> {{each.author.get_full_name}}</span>&bullet;
+                    <span class="mr-2">{{each.created_at.date}}</span> &bullet;
+                    <span class="ml-2"><span class="fa fa-eye"></span> {{each.views}}</span>
+                </div>
+                <h2>{{each.title}}</h2>
+                <span style="font-size: 14px; color: #444;">{{each.description|truncatechars:70}}</span>
+                
+                <!--<span class="badge badge-dark" style="background-color: black; color: #fff;">{{each.category}}</span>-->
+            </div>
+        </a>
+    </div>
+    {% endfor %}
+</div>

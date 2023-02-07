@@ -17,13 +17,21 @@ class ContentToPostAdmin(admin.ModelAdmin):
 
 class PostAdmin(admin.ModelAdmin):
     model = Post
-    list_display = ('title', 'category', 'subcategory')
+    list_display = ('title', 'category', 'subcategory', 'thumbnail')
+
+class SubCategoryAdmin(admin.ModelAdmin):
+    model = SubCategory
+    list_display = ('title', 'category', 'thumbnail')
+
+class CategoryAdmin(admin.ModelAdmin):
+    model = Category
+    list_display = ('title', 'thumbnail')
 
 #admin.site.register(User)
 admin.site.register(Post, PostAdmin)
 admin.site.register(Profile)
-admin.site.register(Category)
+admin.site.register(Category, CategoryAdmin)
 admin.site.register(PostLikes)
 admin.site.register(PostViews)
-admin.site.register(SubCategory)
+admin.site.register(SubCategory, SubCategoryAdmin)
 admin.site.register(ContentToPost, ContentToPostAdmin)
