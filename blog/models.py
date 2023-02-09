@@ -2,10 +2,12 @@ from django.db import models
 from django.contrib.auth.models import User
 from tinymce.models import HTMLField
 
+
 class Profile(User):
     user_type = models.CharField(max_length=20)
     description = models.TextField(blank=True, null=True)
     picture = models.ImageField(upload_to='user/picture', blank=True, null=True)
+    picture_thumbnail = models.ImageField(upload_to='user/picture_thumbnail', blank=True, null=True, help_text='upload max of 200X200')
     visible = models.BooleanField(default=True)
     verified = models.BooleanField(default=False)
     is_blacklisted = models.BooleanField(default=False)
@@ -21,6 +23,8 @@ class Profile(User):
 class Category(models.Model):
     title = models.CharField(max_length=50)
     thumbnail = models.ImageField(upload_to='category/thumbnail', blank=True, null=True)
+    thumbnail_500 = models.ImageField(upload_to='category/thumbnail_500', blank=True, null=True)
+    thumbnail_200 = models.ImageField(upload_to='category/thumbnail_200', blank=True, null=True)
     visible = models.BooleanField(default=True)
     priority = models.IntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -33,6 +37,8 @@ class SubCategory(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     title = models.CharField(max_length=50)
     thumbnail = models.ImageField(upload_to='subcategory/thumbnail', blank=True, null=True)
+    thumbnail_500 = models.ImageField(upload_to='subcategory/thumbnail_500', blank=True, null=True)
+    thumbnail_200 = models.ImageField(upload_to='subcategory/thumbnail_200', blank=True, null=True)
     visible = models.BooleanField(default=True)
     priority = models.IntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -49,6 +55,8 @@ class Post(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     subcategory = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
     thumbnail = models.ImageField(upload_to='post/thumbnail', blank=True, null=True)
+    thumbnail_500 = models.ImageField(upload_to='post/thumbnail_500', blank=True, null=True)
+    thumbnail_200 = models.ImageField(upload_to='post/thumbnail_200', blank=True, null=True)
     author = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True, null=True)
     visible = models.BooleanField(default=True)
     visible_at_homepage = models.BooleanField(default=False)

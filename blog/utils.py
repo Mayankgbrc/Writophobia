@@ -1,4 +1,16 @@
-def get_image_url(post_obj):
+def get_image_url(post_obj, size = None):
+    if size == 200:
+        if post_obj.thumbnail_200:
+            return post_obj.thumbnail_200
+        elif post_obj.subcategory.thumbnail_200:
+            return post_obj.subcategory.thumbnail_200
+        return post_obj.category.thumbnail_200
+    elif size == 500:
+        if post_obj.thumbnail_500:
+            return post_obj.thumbnail_500
+        elif post_obj.subcategory.thumbnail_500:
+            return post_obj.subcategory.thumbnail_500
+        return post_obj.category.thumbnail_500
     if post_obj.thumbnail:
         return post_obj.thumbnail
     elif post_obj.subcategory.thumbnail:

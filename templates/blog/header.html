@@ -2,17 +2,25 @@
     <div class="top-bar">
         <div class="container">
             <div class="row">
-                <div class="col-9 social">
-                    <a href="#"><span class="fa fa-twitter"></span></a>
+                <div class="col-3 social">
+                    <a class="absolute-toggle d-block d-md-none" style="position: unset;" data-toggle="collapse" href="#navbarMenu" role="button" aria-expanded="false" aria-controls="navbarMenu"><span class="burger-lines"></span></a>
+
+                    <!-- absolute-toggle 
+                    <a class="d-sm-none d-md-block" href="#"><span class="fa fa-twitter"></span></a>
                     <a href="#"><span class="fa fa-facebook"></span></a>
                     <a href="#"><span class="fa fa-instagram"></span></a>
                     <a href="#"><span class="fa fa-youtube-play"></span></a>
+                    -->
+                    <div class="d-none d-md-block" style="font-size: 1.3rem; color: #fff;">
+                        <a href="{% url 'home' %}"  style="color: #fff;">Writophobia</a>
+                    </div>
+                    
                 </div>
-                <div class="col-3 search-top">
+                <div class="col-9 search-top">
 
                     <form method="get" action="{% url 'home' %}" class="search-top-form">
                         <span class="icon fa fa-search"></span>
-                        <input type="text" id="s" name="search" placeholder="Type keyword to search..." value="{{searched}}">
+                        <input type="text" id="s" name="search" placeholder="Search on Writophobia..." value="{{searched}}" style="min-width: 240px;">
                     </form>
                 </div>
             </div>

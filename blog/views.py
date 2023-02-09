@@ -9,7 +9,8 @@ from blog.utils import get_image_url
 from django.core.paginator import Paginator
 
 class BlogSelectedView(View):
-    queryset = Post.objects.filter(visible = True)
+    main_queryset = Post.objects.filter(visible = True)
+    queryset = Post.objects.filter(visible = True, visible_at_homepage = True)
     template_name = 'blog/blog_main.html'
 
     def get_categories_queryset(self):
@@ -27,9 +28,8 @@ class BlogSelectedView(View):
         )
 
     def get_queryset(self, post_id):
-        return self.queryset.filter(
-            id = post_id,
-            visible = True
+        return self.main_queryset.filter(
+            id = post_id
         )
 
     def get_suggested_queryset(self, post_obj):
@@ -77,7 +77,7 @@ class BlogSelectedView(View):
         
         exclude_list = exclude_list[1:]
         preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(exclude_list)])
-        final_list = self.queryset.filter(id__in=exclude_list).order_by(preserved)
+        final_list = self.queryset.filter(id__in=exclude_list).order_by(preserved)[0:10]
         
         return final_list
 
@@ -87,6 +87,9 @@ class BlogSelectedView(View):
         )
         if obj.count():
             post_obj = obj.first()
+            if post_obj.code != request.GET.get('code', None):
+                return HttpResponse("Password Protected")
+
             post_obj.views += 1
             post_obj.save()
 
@@ -106,6 +109,14 @@ class BlogSelectedView(View):
             
             for each in suggestions:
                 each.image_url = get_image_url(each)
+
+            popular_posts = self.queryset.order_by('-views')[0:3]
+            for each in popular_posts:
+                each.image_url = get_image_url(each)
+
+            latest_posts = self.queryset.order_by('-created_at')[0:3]
+            for each in latest_posts:
+                each.image_url = get_image_url(each)
             
             post_obj.image_url = get_image_url(post_obj)
 
@@ -119,6 +130,8 @@ class BlogSelectedView(View):
             context = {
                 "post_obj": post_obj,
                 "suggestions": suggestions,
+                "popular_posts": popular_posts,
+                "latest_posts": latest_posts,
                 "categories": self.get_categories_queryset(),
                 "subcategories": self.get_subcategories_queryset()
             }

@@ -8,46 +8,31 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>{{post_obj.title}} &mdash; Writophobia</title>
-    <meta name="description" content="{{post_obj.description}}">
-    <meta name="keywords" content="{{post_obj.tags}}">
-    <meta name="author" content="{{post_obj.author.get_full_name}}">
+    <title>Writophobia - Let's Learn Something</title>
+    <meta name="description" content="Writophobia, a dynamic blogging platform that offers a diverse range of topics including computer programming, travel, and helpful tips. Discover insightful and captivating articles crafted by a guy himself.">
+    <meta name="keywords" content="writophobia,blogs,coding,programming,travel,tips">
     <link rel="canonical" href="{{request.build_absolute_uri}}">
 
-    <meta property='og:title'  content='{{post_obj.title}}'>
-    <meta property='og:description'  content='{{post_obj.description}}'>
+    <meta property='og:title'  content="Writophobia - Let's Learn Something">
+    <meta property='og:description'  content='Writophobia, a dynamic blogging platform that offers a diverse range of topics including computer programming, travel, and helpful tips. Discover insightful and captivating articles crafted by a guy himself.'>
     <meta property='og:url'  content='{{request.build_absolute_uri}}'>
     <meta property="og:image"  content="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/media/{{post_obj.image_url}}">
 
-    <meta name='twitter:title' content='{{post_obj.title}}'>
-    <meta name='twitter:description' content='{{post_obj.description}}'>
+    <meta name='twitter:title' content='Writophobia - Let's Learn Something'>
+    <meta name='twitter:description' content='Writophobia, a dynamic blogging platform that offers a diverse range of topics including computer programming, travel, and helpful tips. Discover insightful and captivating articles crafted by a guy himself.'>
     <meta name='twitter:url' content='{{request.build_absolute_uri}}'>
     <meta name="twitter:image" content="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/media/{{post_obj.image_url}}">
 
-    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:300, 400,700|Inconsolata:400,700" rel="stylesheet">
-    <link rel="stylesheet" href="https://preview.colorlib.com/theme/wordify/css/bootstrap.css">
-    <link rel="stylesheet" href="https://preview.colorlib.com/theme/wordify/css/animate.css">
-    <link rel="stylesheet" href="https://preview.colorlib.com/theme/wordify/css/owl.carousel.min.css">
-    <link rel="stylesheet" href="https://preview.colorlib.com/theme/wordify/fonts/ionicons/css/ionicons.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://preview.colorlib.com/theme/wordify/fonts/flaticon/font/flaticon.css">
-
-    <link rel="stylesheet" href="https://preview.colorlib.com/theme/wordify/css/style.css">
-
-    <!--
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism-tomorrow.min.css">
-    -->
-    <link rel="stylesheet" href="{% static 'prism-v1.css' %}">
+    {% include 'blog/css_import.html' %}
 </head>
 
 <body data-prismjs-copy="Copy Now">
-    <div class="wrap" style="max-width: unset;">
+    <div class="wrap" > <!---->
         {% include 'blog/header.html' %}
         
         <div class="container logo-wrap">
             <div class="row pt-5">
                 <div class="col-12 text-center">
-                    <a class="absolute-toggle d-block d-md-none" data-toggle="collapse" href="#navbarMenu" role="button" aria-expanded="false" aria-controls="navbarMenu"><span class="burger-lines"></span></a>
                     <h1 class="site-logo" style="font-size: 40px;">{{post_obj.title}}</h1>
                 </div>
             </div>
@@ -80,7 +65,6 @@
                             {% endif %}
                         {% endfor %}
         </section>
-        <br><br>
 
         <section class="site-section py-sm">
             <div class="container">
@@ -124,95 +108,14 @@
         </section>
         <footer class="site-footer">
             <div class="container">
-                <div class="row mb-5">
-                    <div class="col-md-4">
-                        <h3>About Author</h3>
-                        <p class="mb-4">
-                            <img src="https://preview.colorlib.com/theme/wordify/images/img_1.jpg" alt="Image placeholder" class="img-fluid">
-                        </p>
-                        <p>{{post_obj.author.get_full_name}}</p>
-                        <p>Lorem ipsum dolor sit amet sa ksal sk sa, consectetur adipisicing elit. Ipsa harum inventore reiciendis. <a href="#">Read More</a></p>
-                    </div>
-                    <div class="col-md-6 ml-auto">
-                        <div class="row">
-                            <div class="col-md-7">
-                                <h3>Latest Post</h3>
-                                <div class="post-entry-sidebar">
-                                    <ul>
-                                        <li>
-                                            <a href="">
-                                                <img src="https://preview.colorlib.com/theme/wordify/images/img_6.jpg" alt="Image placeholder" class="mr-4">
-                                                <div class="text">
-                                                    <h4>How to Find the Video Games of Your Youth</h4>
-                                                    <div class="post-meta">
-                                                        <span class="mr-2">March 15, 2018 </span> &bullet;
-                                                        <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="">
-                                                <img src="https://preview.colorlib.com/theme/wordify/images/img_3.jpg" alt="Image placeholder" class="mr-4">
-                                                <div class="text">
-                                                    <h4>How to Find the Video Games of Your Youth</h4>
-                                                    <div class="post-meta">
-                                                        <span class="mr-2">March 15, 2018 </span> &bullet;
-                                                        <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="">
-                                                <img src="https://preview.colorlib.com/theme/wordify/images/img_4.jpg" alt="Image placeholder" class="mr-4">
-                                                <div class="text">
-                                                    <h4>How to Find the Video Games of Your Youth</h4>
-                                                    <div class="post-meta">
-                                                        <span class="mr-2">March 15, 2018 </span> &bullet;
-                                                        <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-md-1"></div>
-                            <div class="col-md-4">
-                                <div class="mb-5">
-                                    <h3>Quick Links</h3>
-                                    <ul class="list-unstyled">
-                                        <li><a href="#">About Us</a></li>
-                                        <li><a href="#">Travel</a></li>
-                                        <li><a href="#">Adventure</a></li>
-                                        <li><a href="#">Courses</a></li>
-                                        <li><a href="#">Categories</a></li>
-                                    </ul>
-                                </div>
-                                <div class="mb-5">
-                                    <h3>Social</h3>
-                                    <ul class="list-unstyled footer-social">
-                                        <li><a href="#"><span class="fa fa-twitter"></span> Twitter</a></li>
-                                        <li><a href="#"><span class="fa fa-facebook"></span> Facebook</a></li>
-                                        <li><a href="#"><span class="fa fa-instagram"></span> Instagram</a></li>
-                                        <li><a href="#"><span class="fa fa-vimeo"></span> Vimeo</a></li>
-                                        <li><a href="#"><span class="fa fa-youtube-play"></span> Youtube</a></li>
-                                        <li><a href="#"><span class="fa fa-snapchat"></span> Snapshot</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="row">
                     <div class="col-md-12 text-center">
                         <p class="small">
 
-                            Copyright &copy; <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+                            Copyright &copy; 
                             <script>
                                 document.write(new Date().getFullYear());
-                            </script> All Rights Reserved | This template is made with <i class="fa fa-heart text-danger" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                            </script> All Rights Reserved | Writophobia
 
                         </p>
                     </div>
@@ -228,20 +131,8 @@
             <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#f4b214" />
         </svg>
     </div>
-    <script src="https://preview.colorlib.com/theme/wordify/js/jquery-3.2.1.min.js"></script>
-    <script src="https://preview.colorlib.com/theme/wordify/js/jquery-migrate-3.0.0.js"></script>
-    <script src="https://preview.colorlib.com/theme/wordify/js/popper.min.js"></script>
-    <script src="https://preview.colorlib.com/theme/wordify/js/bootstrap.min.js"></script>
-    <script src="https://preview.colorlib.com/theme/wordify/js/owl.carousel.min.js"></script>
-    <script src="https://preview.colorlib.com/theme/wordify/js/jquery.waypoints.min.js"></script>
-    <script src="https://preview.colorlib.com/theme/wordify/js/jquery.stellar.min.js"></script>
-    <script src="https://preview.colorlib.com/theme/wordify/js/main.js"></script>
 
-    <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vaafb692b2aea4879b33c060e79fe94621666317369993" integrity="sha512-0ahDYl866UMhKuYcW078ScMalXqtFJggm7TmlUtp0UlD4eQk0Ixfnm5ykXKvGJNFjLMoortdseTfsRT8oCfgGA==" data-cf-beacon='{"rayId":"78ea6294aa3b2e7c","token":"cd0b4b3a733644fc843ef0b185f98241","version":"2022.11.3","si":100}' crossorigin="anonymous"></script>
-    <!--
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/prism.min.js"></script>
-    -->
-    <script src="{% static 'prism-v1.js' %}"></script>
+    {% include 'blog/js_import.html' %}
 </body>
 
 </html>
