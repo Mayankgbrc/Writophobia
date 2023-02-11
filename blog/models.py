@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from tinymce.models import HTMLField
+from django.template.defaultfilters import truncatechars
 
 
 class Profile(User):
@@ -79,6 +80,9 @@ class ContentToPost(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    @property
+    def short_description(self):
+        return truncatechars(self.content, 50)
 
 
 class PostLikes(models.Model):

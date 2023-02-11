@@ -25,6 +25,36 @@
     <meta name="twitter:image" content="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/media/{{post_obj.image_url}}">
 
     {% include 'blog/css_import.html' %}
+
+    <style>
+        .bold_100{
+            font-weight: 100;
+        }
+        .bold_200{
+            font-weight: 200;
+        }
+        .bold_300{
+            font-weight: 300;
+        }
+        .bold_400{
+            font-weight: 400;
+        }
+        .bold_500{
+            font-weight: 500;
+        }
+        .bold_600{
+            font-weight: 600;
+        }
+        .bold_700{
+            font-weight: 700;
+        }
+        .bold_800{
+            font-weight: 800;
+        }
+        .bold_900{
+            font-weight: 900;
+        }
+    </style>
 </head>
 
 <body data-prismjs-copy="Copy Now">
@@ -49,20 +79,26 @@
                     <div class="col-md-12 col-lg-12 main-content"  style="font-size: 20px !important; line-height: 28px;">
                         {% for each in post_obj.contents %}
                             {% if each.content_type == 'code' %}
-                            <pre class="language-{{each.editor_type}}">
-                                <code class="language-{{each.editor_type}}">
-                                    {{each.content}}
-                                </code>
-                            </pre>
+                                <pre class="language-{{each.editor_type}}">
+                                    <code class="language-{{each.editor_type}}">
+                                        {{each.content}}
+                                    </code>
+                                </pre>
                             {% elif each.content_type == 'image' %}
                                 <div style="text-align: center;">
-                                    <img src="/media/{% if each.image %}{{ each.image }}{% endif %}" style="max-height: 50vh; max-width: 100%;"/>
+                                    <img src="/media/{% if each.image %}{{ each.image }}{% endif %}" style="max-height: 60vh; max-width: 100%;"/>
                                     {{each.content | linebreaks}}
                                 </div>
+                            {% elif each.content_type == 'text_html' %}
+                                <p>
+                                    {% autoescape on %}
+                                    {{each.content | safe}}
+                                    {% endautoescape %}
+                                </p>
                             {% else %}
-                            <p>
-                                {{each.content | linebreaks}}
-                            </p>
+                                <p>
+                                    {{each.content | linebreaks}}
+                                </p>
                             {% endif %}
                         {% endfor %}
         </section>

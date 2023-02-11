@@ -13,7 +13,7 @@ from django.contrib.auth.models import User
 # Register your models here.
 class ContentToPostAdmin(admin.ModelAdmin):
     model = ContentToPost
-    list_display = ('post', 'content_type', 'editor_type', 'priority')
+    list_display = ('post', 'short_description', 'content_type', 'editor_type', 'priority')
 
 class PostAdmin(admin.ModelAdmin):
     model = Post
