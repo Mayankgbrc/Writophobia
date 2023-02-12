@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from tinymce.models import HTMLField
 from django.template.defaultfilters import truncatechars
+from blog.utils import compress_image
 
 
 class Profile(User):
@@ -20,7 +21,6 @@ class Profile(User):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-
 class Category(models.Model):
     title = models.CharField(max_length=50)
     thumbnail = models.ImageField(upload_to='category/thumbnail', blank=True, null=True)
@@ -32,6 +32,11 @@ class Category(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.title
+    
+    def save(self):
+        if self.thumbnail:
+            self = compress_image(self)
+        super(Category, self).save()
 
 
 class SubCategory(models.Model):
@@ -46,6 +51,11 @@ class SubCategory(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.title
+    
+    def save(self):
+        if self.thumbnail:
+            self = compress_image(self)
+        super(SubCategory, self).save()
 
 
 class Post(models.Model):
@@ -69,6 +79,10 @@ class Post(models.Model):
         return self.title
     # Multieditor reference link: https://blog.devgenius.io/best-free-wysiwyg-editor-python-django-admin-panel-integration-d9cb30da1dba
 
+    def save(self):
+        if self.thumbnail:
+            self = compress_image(self)
+        super(Post, self).save()
 
 class ContentToPost(models.Model): 
     post = models.ForeignKey(Post, on_delete=models.CASCADE, blank=True, null=True)

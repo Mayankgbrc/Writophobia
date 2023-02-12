@@ -1,3 +1,8 @@
+from io import BytesIO
+import sys
+from PIL import Image
+from django.core.files.uploadedfile import InMemoryUploadedFile
+
 def get_image_url(post_obj, size = None):
     if size == 200:
         if post_obj.thumbnail_200:
@@ -22,3 +27,32 @@ stop_words = ["i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you"
 def clean_text_to_list(sentence):
     sentence_list = sentence.split()
     return [each for each in sentence_list if each not in stop_words]
+
+
+def get_desired_height(im, desired_width):
+    # get the width height ratio adjust
+    original_width, original_height = im.size
+    aspect_ratio = round(original_height / original_width,3)
+    return int(desired_width * aspect_ratio)
+
+def compress_image(self):
+    # Opening the uploaded image
+    im = Image.open(self.thumbnail).convert('RGB')
+    img_name = self.thumbnail.name.split('.')[0]
+    thumnail_width_list = [500, 200]
+    for i in range(2):
+        output = BytesIO()
+        desired_width = thumnail_width_list[i]
+        desired_height = get_desired_height(im, desired_width)
+        img = im.resize((desired_width, desired_height))
+
+        # after modifications, save it to the output
+        img.save(output, format='JPEG', quality=90)
+        output.seek(0)
+
+        # change the imagefield value to be the newley modifed image value
+        memory_upload = InMemoryUploadedFile(output, 'ImageField', "%s.jpg" % img_name, 'image/jpeg',
+                                        sys.getsizeof(output), None)
+        if i == 0: self.thumbnail_500 = memory_upload
+        elif i == 1: self.thumbnail_200 = memory_upload
+    return self
