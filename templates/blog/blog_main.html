@@ -168,7 +168,7 @@
                                 <ul>
                                     {% for post in popular_posts %}
                                     <li>
-                                        <a href="{% url 'blog-detail' post.id %}">
+                                        <a href="{% url 'blog-detail' post.encoded_url %}">
                                             <img src="/media/{{post.image_url}}" alt="Image placeholder" class="mr-4">
                                             <div class="text">
                                                 <h4>{{post.title}}</h4>
@@ -237,7 +237,7 @@
                                     <ul>
                                         {% for post in latest_posts %}
                                         <li>
-                                            <a href="{% url 'blog-detail' post.id %}">
+                                            <a href="{% url 'blog-detail' post.encoded_url %}">
                                                 <img src="/media/{{post.image_url}}" alt="Image placeholder" class="mr-4">
                                                 <div class="text">
                                                     <h4>{{post.title}}</h4>

@@ -56,3 +56,14 @@ def compress_image(self):
         if i == 0: self.thumbnail_500 = memory_upload
         elif i == 1: self.thumbnail_200 = memory_upload
     return self
+
+from django.utils.http import urlencode
+import re
+
+def encode_url(title, id):
+    title = title.lower().replace(" ", "-")
+    title = re.sub('[^\\w-]+','', title)
+    return f"{title}-{id}"
+
+def get_pk_from_url(pk):
+    return pk.split("-")[-1]

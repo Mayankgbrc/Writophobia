@@ -5,8 +5,9 @@ from django.db.models import F
 from django.views import View
 from blog.filter import PostFilter
 from django.db.models import Case, When, Count
-from blog.utils import get_image_url
+from blog.utils import get_image_url, encode_url, get_pk_from_url
 from django.core.paginator import Paginator
+
 
 class BlogSelectedView(View):
     main_queryset = Post.objects.filter(visible = True)
@@ -36,17 +37,12 @@ class BlogSelectedView(View):
         exclude_list = [post_obj.id]
 
         _qs1 = self.queryset.filter(
-            subcategory = post_obj.subcategory,
-            category = post_obj.category
+            subcategory = post_obj.subcategory, category = post_obj.category
         ).exclude(
             id = post_obj.id
         ).order_by(
-            '-priority',
-            '-created_at'
-        ).values_list(
-            'id', 
-            flat = True
-        )
+            '-priority', '-created_at'
+        ).values_list('id', flat = True)
         exclude_list.extend(_qs1)
 
         if len(exclude_list) < 10:
@@ -55,11 +51,9 @@ class BlogSelectedView(View):
             ).exclude(
                 id__in = exclude_list
             ).order_by(
-                '-priority',
-                '-created_at'
+                '-priority', '-created_at'
             ).values_list(
-                'id', 
-                flat = True
+                'id', flat = True
             )
             exclude_list.extend(_qs2)
             
@@ -67,11 +61,9 @@ class BlogSelectedView(View):
                 _qs3 = self.queryset.exclude(
                     id__in = exclude_list
                 ).order_by(
-                    '-priority',
-                    '-created_at'
+                    '-priority', '-created_at'
                 ).values_list(
-                    'id', 
-                    flat = True
+                    'id', flat = True
                 )
                 exclude_list.extend(_qs3)
         
@@ -82,9 +74,8 @@ class BlogSelectedView(View):
         return final_list
 
     def get(self, request, pk):
-        obj = self.get_queryset(
-            pk
-        )
+        pk = get_pk_from_url(pk)
+        obj = self.get_queryset(pk)
         if obj.count():
             post_obj = obj.first()
             if post_obj.code != request.GET.get('code', None):
@@ -109,14 +100,17 @@ class BlogSelectedView(View):
             
             for each in suggestions:
                 each.image_url = get_image_url(each)
+                each.encoded_url = encode_url(each.title, each.id)
 
             popular_posts = self.queryset.order_by('-views')[0:3]
             for each in popular_posts:
                 each.image_url = get_image_url(each)
+                each.encoded_url = encode_url(each.title, each.id)
 
             latest_posts = self.queryset.order_by('-created_at')[0:3]
             for each in latest_posts:
                 each.image_url = get_image_url(each)
+                each.encoded_url = encode_url(each.title, each.id)
             
             post_obj.image_url = get_image_url(post_obj)
 
@@ -193,6 +187,7 @@ class HomeView(View):
         page_obj = paginator.get_page(page_number)
         for each in page_obj:
             each.image_url = get_image_url(each)
+            each.encoded_url = encode_url(each.title, each.id)
 
         params = ""
         for each in request.GET:
