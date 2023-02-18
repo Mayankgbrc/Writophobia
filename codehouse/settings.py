@@ -83,7 +83,8 @@ WSGI_APPLICATION = 'codehouse.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-if DEBUG == True:
+in_local = False
+if in_local == True:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
