@@ -79,9 +79,14 @@ class Post(models.Model):
         return self.title
     # Multieditor reference link: https://blog.devgenius.io/best-free-wysiwyg-editor-python-django-admin-panel-integration-d9cb30da1dba
 
-    def save(self):
+    def save(self, *args, **kwargs):
         if self.thumbnail:
-            self = compress_image(self)
+            if not self._state.adding:
+                obj = Post.objects.get(id = self.id)
+                if obj.thumbnail != self.thumbnail:
+                    self = compress_image(self)
+            else:
+                self = compress_image(self)
         super(Post, self).save()
 
 class ContentToPost(models.Model): 

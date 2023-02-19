@@ -132,7 +132,9 @@
                         <div class="sidebar-box">
                             <div class="bio text-center">
                                 
-                                {% if post_obj.author.picture %}
+                                {% if post_obj.author.picture_thumbnail %}
+                                <img src="/media/{{post_obj.author.picture_thumbnail}}" alt="Image Placeholder" class="img-fluid" style="height: 100px;">
+                                {% elif post_obj.author.picture %}
                                 <img src="/media/{{post_obj.author.picture}}" alt="Image Placeholder" class="img-fluid" style="height: 100px;">
                                 {% else %}
                                 <img src="https://preview.colorlib.com/theme/wordify/images/person_1.jpg" alt="Image Placeholder" class="img-fluid">
@@ -169,7 +171,7 @@
                                     {% for post in popular_posts %}
                                     <li>
                                         <a href="{% url 'blog-detail' post.encoded_url %}">
-                                            <img src="/media/{{post.image_url}}" alt="Image placeholder" class="mr-4">
+                                            <img src="/media/{{post.image_url_200}}" alt="Image placeholder" class="mr-4">
                                             <div class="text">
                                                 <h4>{{post.title}}</h4>
                                                 <div class="post-meta">
@@ -238,7 +240,7 @@
                                         {% for post in latest_posts %}
                                         <li>
                                             <a href="{% url 'blog-detail' post.encoded_url %}">
-                                                <img src="/media/{{post.image_url}}" alt="Image placeholder" class="mr-4">
+                                                <img src="/media/{{post.image_url_200}}" alt="Image placeholder" class="mr-4">
                                                 <div class="text">
                                                     <h4>{{post.title}}</h4>
                                                     <div class="post-meta">

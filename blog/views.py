@@ -5,7 +5,7 @@ from django.db.models import F
 from django.views import View
 from blog.filter import PostFilter
 from django.db.models import Case, When, Count
-from blog.utils import get_image_url, encode_url, get_pk_from_url
+from blog.utils import get_image_url, encode_url, get_pk_from_url, add_image_and_url
 from django.core.paginator import Paginator
 
 
@@ -84,129 +84,67 @@ class BlogSelectedView(View):
             post_obj.views += 1
             post_obj.save()
 
-            post_obj.contents = ContentToPost.objects.filter(
-                post__id = pk
-            ).order_by(
-                'priority',
-                'created_at',
-                'updated_at',
-                'id'
+            post_obj.contents = ContentToPost.objects.filter(post__id = pk).order_by(
+                'priority', 'created_at', 'updated_at', 'id'
             )
 
-
-            suggestions = self.get_suggested_queryset(
-                post_obj
-            )[:10]
-            
-            for each in suggestions:
-                each.image_url = get_image_url(each)
-                each.encoded_url = encode_url(each.title, each.id)
-
-            popular_posts = self.queryset.order_by('-views')[0:3]
-            for each in popular_posts:
-                each.image_url = get_image_url(each)
-                each.encoded_url = encode_url(each.title, each.id)
-
-            latest_posts = self.queryset.order_by('-created_at')[0:3]
-            for each in latest_posts:
-                each.image_url = get_image_url(each)
-                each.encoded_url = encode_url(each.title, each.id)
-            
-            post_obj.image_url = get_image_url(post_obj)
-
-
             if request.user.is_authenticated:
-                PostViews.objects.create(
-                    user = request.user,
-                    post = post_obj
-                )
+                PostViews.objects.create(user = request.user, post = post_obj)
             
             context = {
-                "post_obj": post_obj,
-                "suggestions": suggestions,
-                "popular_posts": popular_posts,
-                "latest_posts": latest_posts,
+                "post_obj": get_image_url(post_obj),
+                "suggestions": add_image_and_url(self.get_suggested_queryset(post_obj)[:10]),
+                "popular_posts": add_image_and_url(self.queryset.order_by('-views')[0:3]),
+                "latest_posts": add_image_and_url(self.queryset.order_by('-created_at')[0:3]),
                 "categories": self.get_categories_queryset(),
                 "subcategories": self.get_subcategories_queryset()
             }
-            return render(
-                request, 
-                self.template_name, 
-                context
-            )
+            return render(request, self.template_name, context)
         return HttpResponse("Not Found")
 
 
 
 class HomeView(View):
-    queryset = Post.objects.filter(
-        visible = True,
-        visible_at_homepage = True
-    )
+    queryset = Post.objects.filter(visible = True, visible_at_homepage = True)
     template_name = 'blog/home_main.html'
     filter_class = PostFilter
 
     def get_categories_queryset(self):
-        return Category.objects.filter(
-            visible = True
-        ).annotate(
+        return Category.objects.filter(visible = True).annotate(
             total_count = Count('post')
-        ).order_by(
-            '-priority'
-        )
+        ).order_by('-priority')
     
     def get_subcategories_queryset(self):
-        return SubCategory.objects.filter(
-            visible = True
-        ).order_by(
-            '-priority'
-        )
-        #subcat_dict = {}
-        #for each in _qs:
-        #    if each.category.title not in subcat_dict:
-        #        subcat_dict[each.category] = each
-        #    else:
-        #        subcat_dict[each.category].append(each)
-        
+        return SubCategory.objects.filter(visible = True).order_by('-priority')
+    
     def get_queryset(self):
         return self.filter_class(
-            self.request.GET, 
-            self.queryset
+            self.request.GET, self.queryset
         ).qs.order_by(
-            '-priority',
-            '-views',
-            '-id',
+            '-priority', '-views', '-id',
         )
         
 
     def get(self, request):
         page_number = request.GET.get('page')
-        searched = request.GET.get('search','').strip(" ")
         post_objects = self.get_queryset()
         paginator = Paginator(post_objects, 3)
         page_obj = paginator.get_page(page_number)
-        for each in page_obj:
-            each.image_url = get_image_url(each)
-            each.encoded_url = encode_url(each.title, each.id)
-
+        
         params = ""
         for each in request.GET:
             if each != "page":
                 params+= f'&{each}={request.GET[each]}'
 
         context = {
-            "post_objects": page_obj,
+            "post_objects": add_image_and_url(page_obj),
             "page_range": range(1, page_obj.paginator.num_pages + 1),
             "params": params,
             "categories": self.get_categories_queryset(),
             "subcategories": self.get_subcategories_queryset(),
-            "searched": searched
+            "searched": request.GET.get('search','').strip(" ")
         }
-        return render(
-            request, 
-            self.template_name, 
-            context
-        )
+        return render(request, self.template_name, context)
 
 from django.shortcuts import get_object_or_404
 
