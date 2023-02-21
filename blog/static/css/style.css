@@ -4,8 +4,12 @@ body {
     font-weight: 300;
     font-size: 18px;
     line-height: 1.9;
-    color: #171819; }
-    .bold_100{
+    color: #171819; 
+  }
+  .blog-entries > div > p{
+    text-align: justify;
+  }
+  .bold_100{
       font-weight: 100;
   }
   .bold_200{
