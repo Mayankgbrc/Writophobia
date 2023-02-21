@@ -6,6 +6,11 @@ body {
     line-height: 1.9;
     color: #171819; 
   }
+
+  .picture_tagline{
+    color: #666;
+    font-size: 16px !important;
+  }
   .blog-entries > div > p{
     text-align: justify;
   }

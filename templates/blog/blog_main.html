@@ -58,7 +58,7 @@
                             {% elif each.content_type == 'image' %}
                                 <div style="text-align: center;">
                                     <img src="/media/{% if each.image %}{{ each.image }}{% endif %}" style="max-height: 60vh; max-width: 100%;"/>
-                                    {{each.content | linebreaks}}
+                                    <span class="picture_tagline">{{each.content | linebreaks}}</span>
                                 </div>
                             {% elif each.content_type == 'text_html' %}
                                 <p>
