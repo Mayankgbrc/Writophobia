@@ -30,7 +30,9 @@ class PostFilter(filters.FilterSet):
             for each in clean_text:
                 filtered |= Q(title__icontains=each)
                 filtered |= Q(description__icontains=each)
+                filtered |= Q(contenttopost__content__icontains=each)
+                filtered |= Q(tags__icontains=each)
             return queryset.filter(
                 filtered
-            )
+            ).distinct()
         return queryset
