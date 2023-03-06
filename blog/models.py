@@ -59,7 +59,7 @@ class SubCategory(models.Model):
 
 
 class Post(models.Model):
-    title = models.CharField(max_length=50)
+    title = models.CharField(max_length=512)
     description = models.TextField(blank=True, null=True)
     tags = models.TextField(blank=True, null=True, help_text="Add tags comma separated without space")
     views = models.IntegerField(default=0)
