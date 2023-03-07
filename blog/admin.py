@@ -17,7 +17,7 @@ class ContentToPostAdmin(admin.ModelAdmin):
 
 class PostAdmin(admin.ModelAdmin):
     model = Post
-    list_display = ('title', 'category', 'subcategory', 'thumbnail')
+    list_display = ('title', 'category', 'subcategory', 'thumbnail', 'author')
 
 class SubCategoryAdmin(admin.ModelAdmin):
     model = SubCategory

@@ -8,25 +8,28 @@ from django.db.models import Case, When, Count
 from blog.utils import get_image_url, encode_url, get_pk_from_url, add_image_and_url
 from django.core.paginator import Paginator
 
-
-class BlogSelectedView(View):
-    main_queryset = Post.objects.filter(visible = True)
-    queryset = Post.objects.filter(visible = True, visible_at_homepage = True)
-    template_name = 'blog/blog_main.html'
-
-    def get_categories_queryset(self):
+class BlogBase:
+    @staticmethod
+    def get_categories_queryset():
         return Category.objects.filter(
             visible = True
         ).annotate(
             total_count = Count('post')
-        )
+        ).order_by('-priority')
     
-    def get_subcategories_queryset(self):
+    @staticmethod
+    def get_subcategories_queryset():
         return SubCategory.objects.filter(
             visible = True
         ).order_by(
             '-priority'
         )
+
+
+class BlogSelectedView(View):
+    main_queryset = Post.objects.filter(visible = True)
+    queryset = Post.objects.filter(visible = True, visible_at_homepage = True)
+    template_name = 'blog/blog_main.html'
 
     def get_queryset(self, post_id):
         return self.main_queryset.filter(
@@ -96,8 +99,8 @@ class BlogSelectedView(View):
                 "suggestions": add_image_and_url(self.get_suggested_queryset(post_obj)[:10]),
                 "popular_posts": add_image_and_url(self.queryset.order_by('-views')[0:3]),
                 "latest_posts": add_image_and_url(self.queryset.order_by('-created_at')[0:3]),
-                "categories": self.get_categories_queryset(),
-                "subcategories": self.get_subcategories_queryset()
+                "categories": BlogBase.get_categories_queryset(),
+                "subcategories": BlogBase.get_subcategories_queryset()
             }
             return render(request, self.template_name, context)
         return HttpResponse("Not Found")
@@ -109,14 +112,6 @@ class HomeView(View):
     template_name = 'blog/home_main.html'
     filter_class = PostFilter
 
-    def get_categories_queryset(self):
-        return Category.objects.filter(visible = True).annotate(
-            total_count = Count('post')
-        ).order_by('-priority')
-    
-    def get_subcategories_queryset(self):
-        return SubCategory.objects.filter(visible = True).order_by('-priority')
-    
     def get_queryset(self):
         return self.filter_class(
             self.request.GET, self.queryset
@@ -140,8 +135,8 @@ class HomeView(View):
             "post_objects": add_image_and_url(page_obj),
             "page_range": range(1, page_obj.paginator.num_pages + 1),
             "params": params,
-            "categories": self.get_categories_queryset(),
-            "subcategories": self.get_subcategories_queryset(),
+            "categories": BlogBase.get_categories_queryset(),
+            "subcategories": BlogBase.get_subcategories_queryset(),
             "searched": request.GET.get('search','').strip(" ")
         }
         return render(request, self.template_name, context)
@@ -167,3 +162,33 @@ class BlogLikeView(View):
         if not created:
             obj.delete()
         return HttpResponse({'status': 200, "created": created})
+    
+
+class ProfileView(View):
+    template_name = 'blog/profile.html'
+
+    def get_queryset(self, username):
+        return Profile.objects.filter(username = username)
+    
+    def get_post_objects(self, username):
+        return Post.objects.filter(
+            visible = True, 
+            visible_at_homepage = True, 
+            author__username = username
+        ).order_by(
+            '-priority', '-views', '-id',
+        )
+    
+    def get(self, request, username):
+        user_details = self.get_queryset(username)
+        if user_details.count():
+            user_details = user_details.first()
+            context = {
+                "user_details": user_details,
+                "post_objects": add_image_and_url(self.get_post_objects(username)),
+                "categories": BlogBase.get_categories_queryset(),
+                "subcategories": BlogBase.get_subcategories_queryset(),
+            }
+            return render(request, self.template_name, context)
+        
+        return HttpResponse("Not Found")

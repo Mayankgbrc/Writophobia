@@ -3,9 +3,9 @@
 <div class="row">
     {% for each in post_objects %}
     <div class="{% if home == True %}col-lg-4{% endif %} col-md-6">
-        <a href="{% url 'blog-detail' each.encoded_url %}" class="blog-entry element-animate" data-animate-effect="fadeIn">
+        <a href="{% url 'blog-detail' each.encoded_url %}" class="blog-entry element-animate" data-animate-effect="fadeIn" style="border: 1px solid #efefef">
             <img src="/media/{{each.image_url_500}}" alt="Image placeholder">
-            <div class="blog-content-body">
+            <div class="blog-content-body" style="border: none; border-top: 1px solid #efefef">
                 <div class="post-meta">
                     <span class="author mr-2">
                         {% if each.author.picture_thumbnail %}

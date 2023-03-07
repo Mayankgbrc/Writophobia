@@ -131,6 +131,9 @@
                                         <a href="{{ post_obj.author.linkedin_url }}" target="_blank" class="p-2"><span class="fa fa-linkedin" target="_blank"></span></a>
                                         {% endif %}
                                     </p>
+                                    <a href="{% url 'profile' post_obj.author.username %}">
+                                        <button class="btn btn-outline-secondary btn-sm">View Full Profile</button>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -200,7 +203,7 @@
                             {% endif %}
                         </p>
                         <p>{{post_obj.author.get_full_name}}</p>
-                        <p>{{post_obj.author.description|truncatechars:180}} <a href="#">Read More</a></p>
+                        <p>{{post_obj.author.description|truncatechars:180}} <a href="{% url 'profile' post_obj.author.username %}">Read More</a></p>
                     </div>
                     <div class="col-md-6 ml-auto">
                         <div class="row">
