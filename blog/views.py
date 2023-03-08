@@ -1,11 +1,11 @@
 from django.shortcuts import render
-from blog.models import Post, PostViews, Profile, PostLikes, ContentToPost, Category, SubCategory
+from blog.models import Post, PostViews, Profile, PostLikes, ContentToPost, Category, SubCategory, TrackHits
 from django.http import HttpResponse
 from django.db.models import F
 from django.views import View
 from blog.filter import PostFilter
 from django.db.models import Case, When, Count
-from blog.utils import get_image_url, encode_url, get_pk_from_url, add_image_and_url
+from blog.utils import get_image_url, encode_url, get_pk_from_url, add_image_and_url, get_location
 from django.core.paginator import Paginator
 
 class BlogBase:
@@ -24,6 +24,22 @@ class BlogBase:
         ).order_by(
             '-priority'
         )
+
+    @staticmethod
+    def save_hits(request, title, successful = True):
+        loc = get_location(request)
+        hit_data = TrackHits.objects.create(
+            city = loc['city'],
+            country = loc['country'],
+            ip_address = loc['ip'],
+            requested_url = request.build_absolute_uri(),
+            page_title = title,
+            successful = successful
+        )
+        if request.user.is_authenticated:
+            hit_data.user = request.user
+            hit_data.save()
+        return
 
 
 class BlogSelectedView(View):
@@ -94,6 +110,8 @@ class BlogSelectedView(View):
             if request.user.is_authenticated:
                 PostViews.objects.create(user = request.user, post = post_obj)
             
+            BlogBase.save_hits(request, post_obj.title)
+
             context = {
                 "post_obj": get_image_url(post_obj),
                 "suggestions": add_image_and_url(self.get_suggested_queryset(post_obj)[:10]),
@@ -103,6 +121,7 @@ class BlogSelectedView(View):
                 "subcategories": BlogBase.get_subcategories_queryset()
             }
             return render(request, self.template_name, context)
+        BlogBase.save_hits(request, "Not found", False)
         return HttpResponse("Not Found")
 
 
@@ -139,6 +158,7 @@ class HomeView(View):
             "subcategories": BlogBase.get_subcategories_queryset(),
             "searched": request.GET.get('search','').strip(" ")
         }
+        BlogBase.save_hits(request, "Homepage")
         return render(request, self.template_name, context)
 
 from django.shortcuts import get_object_or_404
@@ -189,6 +209,9 @@ class ProfileView(View):
                 "categories": BlogBase.get_categories_queryset(),
                 "subcategories": BlogBase.get_subcategories_queryset(),
             }
+            
+            BlogBase.save_hits(request, user_details.username)
             return render(request, self.template_name, context)
         
+        BlogBase.save_hits(request, "Not Found", False)
         return HttpResponse("Not Found")

@@ -2,6 +2,8 @@ from io import BytesIO
 import sys
 from PIL import Image
 from django.core.files.uploadedfile import InMemoryUploadedFile
+import re
+from django.contrib.gis.geoip2 import GeoIP2
 
 def get_image_url(post_obj):
     """    
@@ -38,21 +40,20 @@ def get_image_url(post_obj):
         post_obj.image_url_200 = post_obj.category.thumbnail_200
     return post_obj
 
-stop_words = [
-    "i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", 
-    "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", 
-    "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", 
-    "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", 
-    "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", 
-    "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", 
-    "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", 
-    "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", 
-    "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", 
-    "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now"
-]
-
 def clean_text_to_list(sentence):
     sentence_list = sentence.split()
+    stop_words = [
+        "i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", 
+        "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", 
+        "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", 
+        "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", 
+        "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", 
+        "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", 
+        "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", 
+        "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", 
+        "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", 
+        "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now"
+    ]
     return [each for each in sentence_list if each not in stop_words]
 
 
@@ -84,9 +85,6 @@ def compress_image(self):
         elif i == 1: self.thumbnail_200 = memory_upload
     return self
 
-from django.utils.http import urlencode
-import re
-
 def encode_url(title, id):
     title = title.lower().replace(" ", "-")
     title = re.sub('[^\\w-]+','', title)
@@ -100,3 +98,22 @@ def add_image_and_url(objs):
         each = get_image_url(each)
         each.encoded_url = encode_url(each.title, each.id)
     return objs
+
+def get_location(request):
+    context={'city':None, 'ip': None, 'country': None}
+    try:
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        try:
+            g = GeoIP2()
+            if x_forwarded_for:
+                ip = x_forwarded_for.split(',')[0]
+                context['city'] = g.city(str(ip))['city']
+                context['ip'] = ip
+                context['country'] = g.country_name(str(ip))
+            else:
+                context['ip'] = request.META.get('REMOTE_ADDR')
+        except:
+            pass
+    except:
+        pass
+    return context

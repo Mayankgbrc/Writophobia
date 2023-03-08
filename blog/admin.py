@@ -6,7 +6,8 @@ from blog.models import (
     PostViews, 
     Category, 
     ContentToPost, 
-    SubCategory
+    SubCategory,
+    TrackHits
 )
 from django.contrib.auth.models import User
 
@@ -26,6 +27,10 @@ class SubCategoryAdmin(admin.ModelAdmin):
 class CategoryAdmin(admin.ModelAdmin):
     model = Category
     list_display = ('title', 'thumbnail')
+    
+class TrackHitsAdmin(admin.ModelAdmin):
+    model = TrackHits
+    list_display = ('user', 'city', 'country', 'ip_address', 'requested_url', 'page_title', 'successful', 'created_at')
 
 #admin.site.register(User)
 admin.site.register(Post, PostAdmin)
@@ -35,3 +40,4 @@ admin.site.register(PostLikes)
 admin.site.register(PostViews)
 admin.site.register(SubCategory, SubCategoryAdmin)
 admin.site.register(ContentToPost, ContentToPostAdmin)
+admin.site.register(TrackHits, TrackHitsAdmin)
