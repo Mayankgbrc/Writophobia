@@ -11,7 +11,7 @@ body {
     color: #666;
     font-size: 16px !important;
   }
-  .blog-entries p{ 
+  .blog-entries p, .main-content{ 
     text-align: justify;
   }
   .bold_100{
