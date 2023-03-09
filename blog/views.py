@@ -45,7 +45,7 @@ class BlogBase:
 class BlogSelectedView(View):
     main_queryset = Post.objects.filter(visible = True)
     queryset = Post.objects.filter(visible = True, visible_at_homepage = True)
-    template_name = 'blog/blog_main.html'
+    template_name = 'blog/blog_main_new.html'
 
     def get_queryset(self, post_id):
         return self.main_queryset.filter(

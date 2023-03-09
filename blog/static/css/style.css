@@ -11,7 +11,7 @@ body {
     color: #666;
     font-size: 16px !important;
   }
-  .blog-entries > div > p{
+  .blog-entries p{ 
     text-align: justify;
   }
   .bold_100{
@@ -41,6 +41,12 @@ body {
   .bold_900{
       font-weight: 900;
   }
+  
+  .btn-rounded {
+    border-radius: 50%;
+    padding: 8px 16px;
+  }  
+
   a {
     -webkit-transition: .3s all ease;
     -o-transition: .3s all ease;

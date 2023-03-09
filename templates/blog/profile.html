@@ -82,24 +82,24 @@
                         <img src="https://preview.colorlib.com/theme/wordify/images/person_1.jpg" alt="Image Placeholder" class="img-fluid">
                         {% endif %}
                         <div class="bio-body">
-                            <h2>{{user_details.get_full_name}}</h2>
-                            <p>{{user_details.description}}</p>
+                            <h1 style="font-size: 36px;">{{user_details.get_full_name}}</h1>
+                            <p style="font-size: 18px;">{{user_details.description}}</p>
                             <p style="display: none;"><a href="#" class="btn btn-primary btn-sm rounded">Read my bio</a></p>
                             <p class="social">
                                 {% if user_details.facebook_url %}
-                                <a href="{{ user_details.facebook_url }}" target="_blank" class="p-2"><span class="fa fa-facebook"></span></a>
+                                <a href="{{ user_details.facebook_url }}" target="_blank" class="btn btn-light btn-rounded btn-icon"><span class="fa fa-facebook"></span></a>
                                 {% endif %}
                                 {% if user_details.twitter_url %}
-                                <a href="{{ user_details.twitter_url }}" target="_blank" class="p-2"><span class="fa fa-twitter" target="_blank"></span></a>
+                                <a href="{{ user_details.twitter_url }}" target="_blank" class="btn btn-light btn-rounded btn-icon"><span class="fa fa-twitter" target="_blank"></span></a>
                                 {% endif %}
                                 {% if user_details.instagram_url %}
-                                <a href="{{ user_details.instagram_url }}" target="_blank" class="p-2"><span class="fa fa-instagram" target="_blank"></span></a>
+                                <a href="{{ user_details.instagram_url }}" target="_blank" class="btn btn-light btn-rounded btn-icon"><span class="fa fa-instagram" target="_blank"></span></a>
                                 {% endif %}
                                 {% if user_details.youtube_url %}
-                                <a href="{{ user_details.youtube_url }}" target="_blank" class="p-2"><span class="fa fa-youtube-play" target="_blank"></span></a>
+                                <a href="{{ user_details.youtube_url }}" target="_blank" class="btn btn-light btn-rounded btn-icon"><span class="fa fa-youtube-play" target="_blank"></span></a>
                                 {% endif %}
                                 {% if user_details.linkedin_url %}
-                                <a href="{{ user_details.linkedin_url }}" target="_blank" class="p-2"><span class="fa fa-linkedin" target="_blank"></span></a>
+                                <a href="{{ user_details.linkedin_url }}" target="_blank" class="btn btn-light btn-rounded btn-icon"><span class="fa fa-linkedin" target="_blank"></span></a>
                                 {% endif %}
                             </p>
                         </div>
