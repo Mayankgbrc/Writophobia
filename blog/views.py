@@ -51,46 +51,42 @@ class BlogSelectedView(View):
         return self.main_queryset.filter(
             id = post_id
         )
+    
+    def extend_qs_list(self, _qs, exclude_list):
+        _new_exclude = _qs.exclude(
+            id__in = exclude_list
+        ).order_by(
+            '-priority', '-created_at'
+        ).values_list(
+            'id', flat = True
+        )
+        exclude_list.extend(_new_exclude)
+        return exclude_list
 
     def get_suggested_queryset(self, post_obj):
         exclude_list = [post_obj.id]
 
-        _qs1 = self.queryset.filter(
+        _qs = self.queryset.filter(
             subcategory = post_obj.subcategory, category = post_obj.category
         ).exclude(
-            id = post_obj.id
+            id__in = exclude_list
         ).order_by(
             '-priority', '-created_at'
-        ).values_list('id', flat = True)
-        exclude_list.extend(_qs1)
+        )
 
-        if len(exclude_list) < 10:
-            _qs2 = self.queryset.filter(
-                category = post_obj.category
-            ).exclude(
-                id__in = exclude_list
-            ).order_by(
-                '-priority', '-created_at'
-            ).values_list(
-                'id', flat = True
-            )
-            exclude_list.extend(_qs2)
+        if _qs.count() < 10:
+            exclude_list = self.extend_qs_list(_qs, exclude_list)
+            _qs2 = self.queryset.filter(category = post_obj.category)
+            exclude_list = self.extend_qs_list(_qs2, exclude_list)
             
             if len(exclude_list) < 10:
-                _qs3 = self.queryset.exclude(
-                    id__in = exclude_list
-                ).order_by(
-                    '-priority', '-created_at'
-                ).values_list(
-                    'id', flat = True
-                )
-                exclude_list.extend(_qs3)
+                exclude_list = self.extend_qs_list(self.queryset, exclude_list)
         
-        exclude_list = exclude_list[1:]
-        preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(exclude_list)])
-        final_list = self.queryset.filter(id__in=exclude_list).order_by(preserved)[0:10]
-        
-        return final_list
+            exclude_list = exclude_list[1:]
+            preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(exclude_list)])
+            final_list = self.queryset.filter(id__in=exclude_list).order_by(preserved)[0:10]
+            return final_list
+        return _qs
 
     def get(self, request, pk):
         pk = get_pk_from_url(pk)
