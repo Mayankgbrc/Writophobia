@@ -145,6 +145,7 @@ class HomeView(View):
         for each in request.GET:
             if each != "page":
                 params+= f'&{each}={request.GET[each]}'
+        params = params.strip("&")
 
         context = {
             "post_objects": add_image_and_url(page_obj),
