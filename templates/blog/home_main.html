@@ -88,14 +88,14 @@
                                     <ul class="pagination">
                                         <!-- Previous Button -->
                                         {% if post_objects.has_previous %}
-                                        <li class="page-item active"><a class="page-link" href="{% url 'home' %}{% if post_objects.previous_page_number != 1 %}?page={{ post_objects.previous_page_number }}&{% else %}?{{params}}{% endif %}">&lt;</a></li>
+                                        <li class="page-item active"><a class="page-link" href="{% url 'home' %}{% if post_objects.previous_page_number != 1 %}?page={{ post_objects.previous_page_number }}{% if params %}&{% endif %}{% else %}{% if params %}?{{params}}{% endif %}{% endif %}">&lt;</a></li>
                                         {% else %}
                                         <li class="page-item disabled"><a class="page-link" href="#">&lt;</a></li>
                                         {% endif %}
 
                                         <!-- Page Number -->
                                         {% for i in page_range %}
-                                        <li class="page-item {% if i == post_objects.number %}active{% endif %}"><a class="page-link" href="{% url 'home' %}{% if i == 1 %}{% if params %}?{{params}}{% endif %}{% else %}?page={{i}}&{{params}}{% endif %}">{{i}}</a></li>
+                                        <li class="page-item {% if i == post_objects.number %}active{% endif %}"><a class="page-link" href="{% url 'home' %}{% if i == 1 %}{% if params %}?{{params}}{% endif %}{% else %}?page={{i}}{% if params %}&{{params}}{% endif %}{% endif %}">{{i}}</a></li>
                                         {% endfor %}
 
                                         <!-- Next Button -->
