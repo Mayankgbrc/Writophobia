@@ -14,6 +14,9 @@ body {
   .blog-entries p, .main-content{ 
     text-align: justify;
   }
+  .picture_tagline p, .picture_tagline > p{
+    text-align: center;
+  }
   .bold_100{
       font-weight: 100;
   }
