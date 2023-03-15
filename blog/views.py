@@ -212,3 +212,13 @@ class ProfileView(View):
         
         BlogBase.save_hits(request, "Not Found", False)
         return HttpResponse("Not Found")
+
+
+class ContactView(View):
+    template_name = 'blog/contact.html'
+    def get(self, request):
+        context = {
+            "categories": BlogBase.get_categories_queryset(),
+            "subcategories": BlogBase.get_subcategories_queryset(),
+        }
+        return render(request, self.template_name, context)
