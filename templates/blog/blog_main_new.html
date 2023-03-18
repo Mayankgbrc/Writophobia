@@ -12,7 +12,7 @@
     <meta name="description" content="{{post_obj.description}}">
     <meta name="keywords" content="{{post_obj.tags}}">
     <meta name="author" content="{{post_obj.author.get_full_name}}">
-    <link rel="canonical" href="{{request.build_absolute_uri}}">
+    <link rel="canonical" href="{{canonical_url}}">
 
     <meta property='og:title'  content='{{post_obj.title}}'>
     <meta property='og:description'  content='{{post_obj.description}}'>
@@ -76,7 +76,8 @@
                                 <br><br>
                         
                                 <h3 class="heading" style="padding-bottom: 20px;
-                                border-bottom: 1px solid #e6e6e6; margin-bottom: 28px;">Expand your reading list:</h3>
+                                border-bottom: 1px solid #e6e6e6; margin-bottom: 28px; 
+                                border-top: 5px solid #aaa8a8; margin-top: 0px; padding-top: 20px;">Expand your reading list:</h3>
 
                                 {% include 'blog/blog_list.html' with post_objects=suggestions home=False %}
 

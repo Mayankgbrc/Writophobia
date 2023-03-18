@@ -7,6 +7,7 @@ from blog.filter import PostFilter
 from django.db.models import Case, When, Count
 from blog.utils import get_image_url, encode_url, get_pk_from_url, add_image_and_url, get_location
 from django.core.paginator import Paginator
+from django.shortcuts import get_object_or_404
 
 class BlogBase:
     @staticmethod
@@ -41,6 +42,12 @@ class BlogBase:
             hit_data.save()
         return
 
+    @staticmethod
+    def build_canonical_url(request):
+        params = [f'{each}={request.GET[each]}' for each in request.GET if each in ['category', 'subcategory']]
+        if len(params):
+            return request.build_absolute_uri(request.path) + "?" + "&".join(params)
+        return request.build_absolute_uri(request.path)
 
 class BlogSelectedView(View):
     main_queryset = Post.objects.filter(visible = True)
@@ -114,12 +121,12 @@ class BlogSelectedView(View):
                 "popular_posts": add_image_and_url(self.queryset.order_by('-views')[0:3]),
                 "latest_posts": add_image_and_url(self.queryset.order_by('-created_at')[0:3]),
                 "categories": BlogBase.get_categories_queryset(),
-                "subcategories": BlogBase.get_subcategories_queryset()
+                "subcategories": BlogBase.get_subcategories_queryset(),
+                "canonical_url": BlogBase.build_canonical_url(request)
             }
             return render(request, self.template_name, context)
         BlogBase.save_hits(request, "Not found", False)
         return HttpResponse("Not Found")
-
 
 
 class HomeView(View):
@@ -133,6 +140,7 @@ class HomeView(View):
         ).qs.order_by(
             '-priority', '-views', '-id',
         )
+    
         
 
     def get(self, request):
@@ -140,12 +148,8 @@ class HomeView(View):
         post_objects = self.get_queryset()
         paginator = Paginator(post_objects, 3)
         page_obj = paginator.get_page(page_number)
-        
-        params = ""
-        for each in request.GET:
-            if each != "page":
-                params+= f'&{each}={request.GET[each]}'
-        params = params.strip("&")
+
+        params = "&".join([f'{each}={request.GET[each]}' for each in request.GET if each != "page"])
 
         context = {
             "post_objects": add_image_and_url(page_obj),
@@ -153,12 +157,13 @@ class HomeView(View):
             "params": params,
             "categories": BlogBase.get_categories_queryset(),
             "subcategories": BlogBase.get_subcategories_queryset(),
-            "searched": request.GET.get('search','').strip(" ")
+            "searched": request.GET.get('search','').strip(" "),
+            "canonical_url": BlogBase.build_canonical_url(request)
         }
+
         BlogBase.save_hits(request, "Homepage")
         return render(request, self.template_name, context)
 
-from django.shortcuts import get_object_or_404
 
 class BlogLikeView(View):
     queryset = Post.objects.all()
@@ -205,6 +210,7 @@ class ProfileView(View):
                 "post_objects": add_image_and_url(self.get_post_objects(username)),
                 "categories": BlogBase.get_categories_queryset(),
                 "subcategories": BlogBase.get_subcategories_queryset(),
+                "canonical_url": BlogBase.build_canonical_url(request)
             }
             
             BlogBase.save_hits(request, user_details.username)
@@ -220,5 +226,6 @@ class ContactView(View):
         context = {
             "categories": BlogBase.get_categories_queryset(),
             "subcategories": BlogBase.get_subcategories_queryset(),
+            "canonical_url": BlogBase.build_canonical_url(request)
         }
         return render(request, self.template_name, context)

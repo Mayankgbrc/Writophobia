@@ -9,15 +9,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     
-    <title>
-        {% if 'subcategory' in request.GET %}'{{request.GET.subcategory}}' Subcategory in {% endif %}
-        {% if 'category' in request.GET %}'{{request.GET.category}}' Category in {% endif %}
-        {% if 'search' in request.GET %}'{{request.GET.search}}' in {% endif %}
-        Writophobia - Let's Learn Something
-    </title>
+    <title>{% if 'subcategory' in request.GET %}'{{request.GET.subcategory}}' Subcategory in {% endif %}{% if 'category' in request.GET %}'{{request.GET.category}}' Category in {% endif %}{% if 'search' in request.GET %}'{{request.GET.search}}' in {% endif %}Writophobia - Let's Learn Something</title>
     <meta name="description" content="Discover Writophobia, a dynamic blogging platform that offers a rich selection of topics, including computer programming, travel, and practical tips. Immerse yourself in insightful and engaging articles, all written by authors with a unique perspective.">
     <meta name="keywords" content="writophobia,blogs,coding,programming,travel,tips">
-    <link rel="canonical" href="{{request.build_absolute_uri}}">
+    <link rel="canonical" href="{{canonical_url}}">
 
     <meta property='og:title'  content="Writophobia - Let's Learn Something">
     <meta property='og:description'  content='Discover Writophobia, a dynamic blogging platform that offers a rich selection of topics, including computer programming, travel, and practical tips. Immerse yourself in insightful and engaging articles, all written by authors with a unique perspective.'>

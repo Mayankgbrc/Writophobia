@@ -34,7 +34,7 @@
                         <a class="nav-link active" href="{% url 'home' %}">Home</a>
                     </li>
                     <li class="nav-item active dropdown">
-                        <a class="nav-link dropdown-toggle" href="category.html" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Category</a>
+                        <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Category</a>
                         <div class="dropdown-menu" aria-labelledby="dropdown04">
                             {% for category in categories %}
                             <a class="dropdown-item" href="{% url 'home' %}?category={{category.title}}">{{category.title}}</a>
@@ -42,7 +42,7 @@
                         </div>
                     </li>
                     <li class="nav-item active dropdown">
-                        <a class="nav-link dropdown-toggle" href="category.html" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Popular Sub-Category</a>
+                        <a class="nav-link dropdown-toggle" href="#" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Popular Sub-Category</a>
                         <div class="dropdown-menu" aria-labelledby="dropdown05">
                             {% for subcategory in subcategories %}
                             <a class="dropdown-item" href="{% url 'home' %}?subcategory={{subcategory.title}}">{{subcategory.title}}</a>
