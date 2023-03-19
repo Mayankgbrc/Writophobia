@@ -229,3 +229,27 @@ class ContactView(View):
             "canonical_url": BlogBase.build_canonical_url(request)
         }
         return render(request, self.template_name, context)
+    
+
+
+"""
+1. API Creation
+
+
+
+2. API Calling
+
+
+
+"""
+import json
+class APICreate(View):
+    # 127.0.0.1:8000/api_create
+    def get(self, request):
+        # API Creation
+        context = {
+            "name": "Swati Mishra",
+            "age": 25,
+            "profession": "Engineer"
+        }
+        return HttpResponse(json.dumps(context))
