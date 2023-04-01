@@ -175,7 +175,7 @@
                             <ul class="tags">
                                 {% with post_obj.tags|split:"," as tags %}
                                     {% for tag in tags %}
-                                    <li><a href="#">{{tag}}</a></li>
+                                    <li><a href="/?search={{tag}}">{{tag}}</a></li>
                                     {% endfor %}
                                 {% endwith %}
                             </ul>
