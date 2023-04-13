@@ -48,31 +48,32 @@
                         </div>
                         <div class="blog-entries">
                             <div class="main-content"  style="font-size: 20px !important; line-height: 28px; ">
-                                {% for each in post_obj.contents %}
-                                    {% if each.content_type == 'code' %}
-                                        <pre class="language-{{each.editor_type}}">
-                                            <code class="language-{{each.editor_type}}">
-                                                {{each.content}}
-                                            </code>
-                                        </pre>
-                                    {% elif each.content_type == 'image' %}
-                                        <div style="text-align: center;">
-                                            <img src="/media/{% if each.image %}{{ each.image }}{% endif %}" style="max-height: 60vh; max-width: 100%;"/>
-                                            <span class="picture_tagline">{{each.content | linebreaks}}</span>
-                                        </div>
-                                    {% elif each.content_type == 'text_html' %}
-                                        <p>
-                                            {% autoescape on %}
-                                            {{each.content | safe}}
-                                            {% endautoescape %}
-                                        </p>
-                                    {% else %}
-                                        <p>
-                                            {{each.content | linebreaks}}
-                                        </p>
-                                    {% endif %}
-                                {% endfor %}
-                                
+                                <div class="blog-content">
+                                    {% for each in post_obj.contents %}
+                                        {% if each.content_type == 'code' %}
+                                            <pre class="language-{{each.editor_type}}">
+                                                <code class="language-{{each.editor_type}}">
+                                                    {{each.content}}
+                                                </code>
+                                            </pre>
+                                        {% elif each.content_type == 'image' %}
+                                            <div style="text-align: center;">
+                                                <img src="/media/{% if each.image %}{{ each.image }}{% endif %}" style="max-height: 60vh; max-width: 100%;"/>
+                                                <span class="picture_tagline">{{each.content | linebreaks}}</span>
+                                            </div>
+                                        {% elif each.content_type == 'text_html' %}
+                                            <p>
+                                                {% autoescape on %}
+                                                {{each.content | safe}}
+                                                {% endautoescape %}
+                                            </p>
+                                        {% else %}
+                                            <p>
+                                                {{each.content | linebreaks}}
+                                            </p>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
                                 <br><br>
                         
                                 <h3 class="heading" style="padding-bottom: 20px;

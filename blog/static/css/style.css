@@ -6,6 +6,12 @@ body {
     line-height: 1.9;
     color: #171819; 
   }
+  .blog-content{ 
+    font-family: IBM Plex Serif,sans-serif;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 1.9;
+  }
 
   .picture_tagline{
     color: #666;
