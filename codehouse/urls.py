@@ -22,7 +22,7 @@ from django.conf.urls.static import static
 from django.views.static import serve
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('hjadklmin/', admin.site.urls),
     re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
     path('', include('blog.urls')),
     #path('authenticate/', include('authenticate.urls')),
