@@ -25,7 +25,7 @@ GEOIP_PATH = os.path.join(BASE_DIR, 'geoip/')
 SECRET_KEY = 'django-insecure-%n0tvt7!ymtvo493&mp*vda=cy!jil84-nen+^!rr7z+r$35bw'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 if DEBUG:
     ALLOWED_HOSTS = ['writophobia.com', '127.0.0.1:8000', '127.0.0.1']
