@@ -25,10 +25,12 @@ GEOIP_PATH = os.path.join(BASE_DIR, 'geoip/')
 SECRET_KEY = 'django-insecure-%n0tvt7!ymtvo493&mp*vda=cy!jil84-nen+^!rr7z+r$35bw'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['writophobia.com', '127.0.0.1:8000']
-
+if DEBUG:
+    ALLOWED_HOSTS = ['writophobia.com', '127.0.0.1:8000', '127.0.0.1']
+else:
+    ALLOWED_HOSTS = ['writophobia.com', ]
 
 # Application definition
 
@@ -42,8 +44,14 @@ INSTALLED_APPS = [
     'django_filters',
     'tinymce',
     'crispy_forms',
+    'crispy_bootstrap4',
+    'comment',
     'blog',
     'authenticate'
+]
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend', 
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -58,7 +66,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CSRF_TRUSTED_ORIGINS = ['https://*.writophobia.com', 'https://writophobia.com', 'http://127.0.0.1:8000']
+CSRF_TRUSTED_ORIGINS = ['https://*.writophobia.com', 'https://writophobia.com', ]
 
 ROOT_URLCONF = 'codehouse.urls'
 
@@ -84,8 +92,7 @@ WSGI_APPLICATION = 'codehouse.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-in_local = False
-if in_local == True:
+if DEBUG:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -95,8 +102,6 @@ if in_local == True:
 else:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'writo',
             'USER': 'mayank',
@@ -137,6 +142,8 @@ USE_I18N = True
 
 USE_TZ = True
 
+LOGIN_URL = 'authenticate/login'
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
@@ -145,6 +152,8 @@ STATIC_URL= "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 MEDIA_URL="/media/"
 MEDIA_ROOT= os.path.join(BASE_DIR, "media")
+
+CRISPY_TEMPLATE_PACK='bootstrap4'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -156,3 +165,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
     'django.core.context_processors.request',
 )
+
+# Comments Settings
+COMMENT_USE_GRAVATAR = True
+
+PROFILE_APP_NAME = 'blog'
+PROFILE_MODEL_NAME = 'Profile' # letter case insensitive

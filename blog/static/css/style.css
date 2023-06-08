@@ -6,6 +6,8 @@ body {
     line-height: 1.9;
     color: #171819; 
   }
+
+
   .blog-content{ 
     font-family: IBM Plex Serif,sans-serif;
     font-weight: 300;
@@ -86,19 +88,29 @@ body {
       background: transparent !important; }
       @media (max-width: 767.98px) {
         header .navbar {
-          background: #e6e6e6 !important; } }
+          background: #6610f2 !important; 
+          color: #fff;
+        } 
+      }
       header .navbar .nav-link {
         padding: 1.7rem 1rem;
         font-size: 16px;
         outline: none !important;
         text-transform: uppercase;
-        letter-spacing: .05em; }
+        letter-spacing: .05em; 
+        color: #fff !important;
+      }
         @media (max-width: 991.98px) {
           header .navbar .nav-link {
             padding: 1.7rem 1rem; } }
         @media (max-width: 767.98px) {
           header .navbar .nav-link {
-            padding: .5rem 0rem; } }
+            padding: .5rem 0rem; color: #fff !important;} }
+      
+      #navbarMenu ul li a{
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
       header .navbar .dropdown-menu {
         font-size: 14px;
         border-radius: 0px;
@@ -122,10 +134,10 @@ body {
             header .navbar .dropdown-menu:before {
               display: none; } }
         header .navbar .dropdown-menu .dropdown-item:hover {
-          background: #6610f2;
+          background: #8236fc;
           color: #fff; }
         header .navbar .dropdown-menu .dropdown-item.active {
-          background: #6610f2;
+          background: #8236fc;
           color: #fff; }
         header .navbar .dropdown-menu a {
           padding-top: 7px;
@@ -140,13 +152,13 @@ body {
       width: 30px;
       display: inline-block;
       height: 2px;
-      background: #000;
+      background: #fff;
       position: relative; }
       .absolute-toggle .burger-lines:before, .absolute-toggle .burger-lines:after {
         position: absolute;
         height: 2px;
         content: "";
-        background: #000;
+        background: #fff;
         width: 100%;
         left: 0; }
       .absolute-toggle .burger-lines:before {

@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 from tinymce.models import HTMLField
 from django.template.defaultfilters import truncatechars
 from blog.utils import compress_image
+from django.contrib.contenttypes.fields import GenericRelation
+from django.urls import reverse
+from comment.models import Comment
 
 
 class Profile(User):
@@ -21,6 +24,16 @@ class Profile(User):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def get_absolute_url(self):
+        return reverse('profile', kwargs={'username': self.username})
+    
+    def get_title_full_name(self):
+        """
+        Return the first_name plus the last_name, with a space in between and in title case.
+        """
+        full_name = "%s %s" % (self.first_name, self.last_name)
+        return full_name.strip().title()
+    
 class Category(models.Model):
     title = models.CharField(max_length=50)
     thumbnail = models.ImageField(upload_to='category/thumbnail', blank=True, null=True)
@@ -75,6 +88,11 @@ class Post(models.Model):
     priority = models.IntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    comments = GenericRelation(Comment)
+
+    def get_absolute_url(self):
+        return reverse('post_detail_url', kwargs={'slug': self.slug})
+    
     def __str__(self):
         return self.title
     # Multieditor reference link: https://blog.devgenius.io/best-free-wysiwyg-editor-python-django-admin-panel-integration-d9cb30da1dba

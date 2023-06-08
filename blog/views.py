@@ -201,7 +201,9 @@ class ProfileView(View):
             '-priority', '-views', '-id',
         )
     
-    def get(self, request, username):
+    def get(self, request, username = None):
+        if not username and request.user.is_authenticated:
+            username = request.user.username
         user_details = self.get_queryset(username)
         if user_details.count():
             user_details = user_details.first()

@@ -1,18 +1,30 @@
 <!--extends "main/header.html" --> 
 
-{% block content %}      
-
+{% include 'blog/css_import.html' %}
 {% load crispy_forms_tags %}
 
-<!--Login--> 
-<div class="container py-5">
-  <h1>Login</h1>
-  <form method="POST">
-    {% csrf_token %}
-    {{ login_form|crispy }}
-    <button class="btn btn-primary" type="submit">Login</button>
-  </form>
-  <p class="text-center">Don't have an account? <a href="/register">Create an account</a>.</p>
-</div>
 
-{% endblock %}
+<body>
+  <div class="wrap">
+    {% include 'blog/header.html' %}
+    <!--Login--> 
+    <div class="container py-5">
+      <h1>Login</h1>
+      <div class="errors" style="color: red;">
+        {% for message in messages %}
+          {{ message }}
+        {% endfor %}
+      </div>
+      <form method="POST" novalidate>
+        {% csrf_token %}
+        {{form|crispy }} 
+        <input type="hidden" name="next" value="{{next}}" />
+        <button class="btn btn-primary" type="submit">Submit</button>
+      </form>
+      <p class="text-center">Don't have an account? <a href="{% url 'register' %}">Create an account</a>.</p>
+    </div>
+  </div>
+</body>
+
+
+{% include 'blog/js_import.html' %}

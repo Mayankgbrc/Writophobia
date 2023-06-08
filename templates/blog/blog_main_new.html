@@ -1,5 +1,6 @@
 {% load static %}
 {% load custom_filters %}
+{% load comment_tags %}
 
 <!doctype html>
 <html lang="en">
@@ -73,6 +74,9 @@
                                             </p>
                                         {% endif %}
                                     {% endfor %}
+                                </div>
+                                <div style="font-family: IBM Plex Serif,sans-serif;">
+                                    {% render_comments post_obj request %}
                                 </div>
                                 <br><br>
                         
@@ -174,7 +178,7 @@
                         <div class="sidebar-box">
                             <h3 class="heading">Tags</h3>
                             <ul class="tags">
-                                {% with post_obj.tags|split:"," as tags %}
+                                {% with post_obj.tags|split_strip as tags %}
                                     {% for tag in tags %}
                                     <li><a href="/?search={{tag}}">{{tag}}</a></li>
                                     {% endfor %}

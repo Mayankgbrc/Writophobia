@@ -23,9 +23,10 @@ from django.views.static import serve
 
 urlpatterns = [
     path('hjadklmin/', admin.site.urls),
+    path('comment/', include('comment.urls')),
     re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
     path('', include('blog.urls')),
-    #path('authenticate/', include('authenticate.urls')),
+    path('authenticate/', include('authenticate.urls')),
     #path('accounts/', include('django.contrib.auth.urls')),
 
     #path("accounts/password_reset", password_reset_request, name="password_reset"),

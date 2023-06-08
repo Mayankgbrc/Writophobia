@@ -17,7 +17,18 @@
                     
                 </div>
                 <div class="col-9 search-top">
-
+                    {% if request.user.is_authenticated %}
+                    <a href="{% url 'my_profile' %}">
+                        <button class="d-none d-md-block btn btn-outline-light btn-sm search-top-form" style="margin-left: 15px;">My Profile</button>
+                    </a>
+                    {% else %}
+                    <a href="{% url 'login' %}">
+                        <button class="d-none d-md-block btn btn-outline-light btn-sm search-top-form" style="margin-left: 15px;">Login</button>
+                    </a>
+                    <a href="{% url 'register' %}">
+                        <button class="d-none d-md-block btn btn-outline-light btn-sm search-top-form" style="margin-left: 15px;">Register</button>
+                    </a>
+                    {% endif %}
                     <form method="get" action="{% url 'home' %}" class="search-top-form">
                         <span class="icon fa fa-search"></span>
                         <input type="text" id="s" name="search" placeholder="Search on Writophobia..." value="{{searched}}" style="min-width: 240px;" autocomplete="off">
@@ -26,7 +37,7 @@
             </div>
         </div>
     </div>
-    <nav class="navbar navbar-expand-md  navbar-light bg-light">
+    <nav class="navbar navbar-expand-md  navbar-light bg-light" style="padding: 0;">
         <div class="container">
             <div class="collapse navbar-collapse" id="navbarMenu">
                 <ul class="navbar-nav mx-auto">
@@ -52,6 +63,18 @@
                     <li class="nav-item active">
                         <a class="nav-link" href="{% url 'contact-us' %}">Contact</a>
                     </li>
+                    {% if request.user.is_authenticated %}
+                    <li class="nav-item active d-md-none">
+                        <a class="nav-link" href="{% url 'my_profile' %}">My Profile</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item active d-md-none">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li class="nav-item active d-md-none">
+                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
