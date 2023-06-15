@@ -92,13 +92,14 @@ body {
           color: #fff;
         } 
       }
+      
       header .navbar .nav-link {
         padding: 1.7rem 1rem;
         font-size: 16px;
         outline: none !important;
         text-transform: uppercase;
         letter-spacing: .05em; 
-        color: #fff !important;
+        color: #000 !important;
       }
         @media (max-width: 991.98px) {
           header .navbar .nav-link {
