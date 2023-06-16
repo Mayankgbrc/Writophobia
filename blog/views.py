@@ -44,7 +44,7 @@ class BlogBase:
 
     @staticmethod
     def build_canonical_url(request):
-        params = [f'{each}={request.GET[each]}' for each in request.GET if each in ['category', 'subcategory']]
+        params = [f'{each}={request.GET[each]}' for each in request.GET if each in ['category', 'subcategory', 'search']]
         if len(params):
             return request.build_absolute_uri(request.path) + "?" + "&".join(params)
         return request.build_absolute_uri(request.path)
